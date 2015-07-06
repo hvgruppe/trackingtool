@@ -864,6 +864,15 @@
 			changeMonth: true,
 			changeYear: true
 		});
+		
+		$("#casedate").datepicker({
+			dateFormat:"dd-mm-yy",
+			yearRange: '1920:2020',
+			minDate: new Date(),
+			maxDate: "01-01-2020",
+			changeMonth: true,
+			changeYear: true
+		});
 	});	
 	
 	
