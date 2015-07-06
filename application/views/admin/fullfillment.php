@@ -1,3 +1,9 @@
+<?php
+	if($this->session->userdata('roleid')!=1){
+		// echo site_url('login');
+		print "<script>window.location.href='".site_url('login')."';</script>";
+	}
+?>
 <?php $this->load->view('includes/adminconfiguration');?>
 	<div id="page-wrapper">
 		<div class="row">

@@ -25,6 +25,14 @@ class Logindetailsmodel extends CI_Model {
 		}
 		return $role;
 	}
+	
+	public function session_tracking($data)
+	{
+		$this->db->insert('ips_sessions', $data); 
+		$autoid = $this->db->insert_id();
+	
+		return ($this->db->affected_rows() > 0) ? TRUE : FALSE;
+	}
 }
 
 /* End of file Logindetailsmodel.php */

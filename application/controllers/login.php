@@ -9,17 +9,35 @@ class Login extends CI_Controller {
 	}
 	
 	public function validate_credentials(){
+		
 		$this->load->model('logindetailsmodel');
 		$result = $this->logindetailsmodel->useravailable();
 		if($result)
 		{
 			$role = $this->logindetailsmodel->userrole($this->input->post('username'));
 			if($role == 1){
+				
+				$this->session->set_userdata('username',$this->input->post('username'));
+				$result = $this->logindetailsmodel->session_tracking($this->session->all_userdata());
+				
+				$session_value = array(
+					'roleid'=>'1',
+					'role'=>'Admin'
+				);
+				
+				$this->session->set_userdata($session_value);
 				redirect('admin/homepage');
 			}
 			else{
-				// $data['main_content'] = 'store/index';
-				// $this->load->view('includes/template',$data);
+				
+				$this->session->set_userdata('username',$this->input->post('username'));
+				$result = $this->logindetailsmodel->session_tracking($this->session->all_userdata());
+				$session_value = array(
+					'roleid'=>'2',
+					'role'=>'Store'
+				);
+				$this->session->set_userdata($session_value);
+				
 				redirect('store/homepage');
 			}
 		}

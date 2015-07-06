@@ -5,22 +5,63 @@ class Homepage extends CI_Controller {
 	public function __construct()
 	{
         parent::__construct();
+		$this->load->database();
+		$this->load->helper('url');
 		
-		ob_start();
-		header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
-		header('Cache-Control: no-cache, no-store, must-revalidate, max-age=0');
-		header('Cache-Control: post-check=0, pre-check=0', FALSE);
-		header('Pragma: no-cache');
-		ob_clean();
-		//$this->output->nocache();
+		$this->load->library('grocery_CRUD');
 	}
 	
 	public function index()
 	{
-		//$data['main_content'] = 'login_form';
-		//$this->load->view('includes/template',$data);
+		$crud = new grocery_CRUD();
+ 
+        $crud->set_theme('datatables');
+        $crud->set_table('ips_ordertracking');
+        $crud->set_subject('Sales Tracking');
+        $crud->required_fields('NAME');
+        $crud->columns('ordertrackingid','orderid','name','orderdate');
+		//$crud->fields('ordertrackingid','orderid','name','orderdate');
+		$crud->callback_column('ordertrackingid',array($this,'_callback_webpage_url'));
+		$crud->callback_column('orderdate',array($this,'_callback_dateformat'));
+		// $crud->fields('NAME');
+		// $crud->unset_add();
+		$crud->unset_edit();
+		$crud->unset_delete();
+		
+		// $crud->callback_after_insert(array($this, 'fullfillmentid_generation'));
+		
+        $output = $crud->render();
+		$state = $crud->getState();
+		if($state == 'add')
+		{
+			  redirect('store/addtracking');
+		}
+		// $this->grocery_crud->set_table('ips_login');
+        // $output = $this->grocery_crud->render();
+		$this->_example_output($output);
+	} 		
+	
+	public function _callback_dateformat($value, $row)
+	{
+		return date('d-m-Y',$value);
+	}
+	
+	public function _callback_webpage_url($value, $row)
+	{
+	  return "<a href='".site_url('store/managingtrack/edittracking?orderid='.$row->hashordertrackingid)."'>$value</a>";
+	}
 
-		$this->load->view('store/homepage');
+	function _example_output($output = null)
+    {
+        $this->load->view('store/managetracking',$output);    
+    }
+	
+	public function edittracking()
+	{
+		$data = array();
+		$data['val'] = $_GET;
+		
+		$this->load->view('store/edittracking',$data);    
 	}
 	
 }

@@ -1,6 +1,11 @@
+<?php
+	if($this->session->userdata('roleid')!=1){
+		// echo site_url('login');
+		print "<script>window.location.href='".site_url('login')."';</script>";
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="utf-8">
@@ -23,10 +28,24 @@
 	<!-- Custom Fonts -->
     <link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.min.css" />
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+	
+	<style>
+		.col-lg-12 {
+			border-top: 1px solid #eee;
+		}
+		.navbar{
+			border:none;
+		}
+		
+		/*
+		.navbar-header{
+			margin-bottom:40px;
+		}
+		*/
+	</style>
 </head>
 
 <body>
-
     <div id="wrapper">
 		
 		<!-- Navigation -->
@@ -244,7 +263,7 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href=<?php echo site_url('admin/fullfillment');?>><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->

@@ -1,3 +1,4 @@
+<?php $this->session->sess_destroy(); ?>
 <!DOCTYPE html>
 <html lang="en">
 

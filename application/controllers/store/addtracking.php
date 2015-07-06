@@ -39,16 +39,18 @@ class Addtracking extends CI_Controller {
 		if(isset($_POST))
 		{
 			$data = array();
+			$casedata = array();
+			
 			$data['fullfillment'] = $this->input->post('fullfillment');
 			$data['name'] = mysql_real_escape_string($this->input->post('name'));
 			$data['address'] = mysql_real_escape_string($this->input->post('address'));
 			$data['orderid'] = $this->input->post('orderid');
 			$data['returnid'] = $this->input->post('returnid');
-			$data['orderdate'] = $this->input->post('orderdate');
+			$data['orderdate'] = strtotime($this->input->post('orderdate'));
 			$data['invoice'] = $this->input->post('invoice');
 			$data['srnno'] = $this->input->post('srnno');
-			$data['return_initiate_date'] = $this->input->post('return_initiate_date');
-			$data['return_rece_date'] = $this->input->post('return_rece_date');
+			$data['return_initiate_date'] = strtotime($this->input->post('return_initiate_date'));
+			$data['return_rece_date'] = strtotime($this->input->post('return_rece_date'));
 			$data['upc'] = $this->input->post('upc');
 			$data['partno'] = $this->input->post('partno');
 			$data['description'] = $this->input->post('description');
@@ -65,6 +67,10 @@ class Addtracking extends CI_Controller {
 			$data['apx_bill_no'] = $this->input->post('apx_bill_no');
 			$data['status'] = $this->input->post('status');
 			
+			$casedata['casedetails'] = $this->input->post('casedetails');
+			$casedata['casedate'] = strtotime($this->input->post('casedate'));
+			$casedata['casenotes'] = $this->input->post('notes');
+			
 			$data['createdby'] = 1; //$this->session->user
 			$data['createddate'] = time();
 			$data['lastmodifiedby'] = 1; //$this->session->user
@@ -72,7 +78,7 @@ class Addtracking extends CI_Controller {
 			$data['numberofmodification'] = 1;
 			
 			$this->load->model('trackingmodel');
-			$id = $this->trackingmodel->add_tracking($data);
+			$id = $this->trackingmodel->add_tracking($data, $casedata);
 			//echo $id;
 			// echo site_url('admin/managingtrack');
 			redirect('store/managingtrack');

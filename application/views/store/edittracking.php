@@ -1,5 +1,9 @@
-<?php ini_set('display_errors', 1); ?>
-<?php print_r($val); ?>
+<?php
+	if($this->session->userdata('roleid')!=2){
+		// echo site_url('login');
+		print "<script>window.location.href='".site_url('login')."';</script>";
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,6 +20,7 @@
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/bootstrap/dist/css/bootstrap.min.css" />
 	<!-- Bootstrap Responsive CSS -->
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/bootstrap/bootstrap-responsive.min.css" />
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<!-- MetisMenu CSS -->
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/metisMenu/dist/metisMenu.min.css" />
     <!-- Timeline CSS -->
@@ -40,7 +45,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-				<a class="navbar-brand" href=<?php echo site_url('admin/homepage');?>>
+				<a class="navbar-brand" href=<?php echo site_url('store/homepage');?>>
 					<img src="<?php echo base_url();?>img/iplanet.jpg" alt="iPlanet" />
 				</a>
             </div>
@@ -241,12 +246,7 @@
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href=<?php echo site_url('login');?>><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -270,26 +270,9 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="index.html" class="active"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href=<?php echo site_url('store/homepage');?>><i class="fa fa-th-list fa-fw"></i> Order Management</a>
                         </li>
-                        <li>
-                            <a href="#"><i class="fa fa-files-o fa-fw"></i>Configuration <span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-								<li>
-									<a href=<?php echo site_url('admin/fullfillment');?>>Fullfillment</a>
-								</li>
-								<li>
-									<a href=<?php echo site_url('admin/disposition');?>>Disposition</a>
-								</li>
-								<li>
-									<a href=<?php echo site_url('admin/productcondition');?>>Product Condition</a>
-								</li>
-								<li>
-									<a href=<?php echo site_url('admin/productstatus');?>>Product Status</a>
-								</li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
+                        
                         <!--<li>
                             <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
                         </li>
@@ -379,7 +362,7 @@
             <!-- /.row -->
             <div class="row">
 				<div class="col-lg-12 col-md-6">
-					<form name="frmtracking" action="addtracking/inserttracking" method="post" onSubmit="return validateFormFields()">
+					<form name="frmtracking" action="updatetracking" method="post" onSubmit="return validateFormFields()">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             Sales Return
@@ -387,10 +370,10 @@
                         <div class="panel-body">
                             <div id="rootwizard">
 									<ul class="nav nav-pills">
-										<li class="active"><a href="#tab1" data-toggle="tab">Order Details</a></li>
-										<li class=""><a href="#tab2" data-toggle="tab">SAP Details</a></li>
-										<li class=""><a href="#tab3" data-toggle="tab">Product Details</a></li>
-										<li class=""><a href="#tab4" data-toggle="tab">Product Condition</a></li>
+										<li class="active"><a href="#tab1" data-toggle="tab">Order/SAP Details</a></li>
+										<li class=""><a href="#tab2" data-toggle="tab">Product Details</a></li>
+										<li class=""><a href="#tab3" data-toggle="tab">Product Condition</a></li>
+										<li class=""><a href="#tab4" data-toggle="tab">Case Details</a></li>
 									</ul>
 									<div class="tab-content">
 										<div class="tab-pane active" id="tab1">
@@ -402,122 +385,97 @@
 													<div class="row-fluid">
 														<div class="span3">
 															<div id="divfullfillment" class="form-group">
-																<label>Fullfillment*</label>
+																<label>Fullfillment</label>
 																<select class="form-control" id="fullfillment" name="fullfillment">
 																<option value="">Select Fullfillment</option>
 																<?php
 																	foreach($fullfillmentdetails as $row)
 																	{
-																		echo "<option value='".$row['FID']."'>". $row['NAME'] ."</option>";
+																		if($fullfillment == $row['FID'])
+																			echo "<option selected value='".$row['FID']."'>". $row['NAME'] ."</option>";
+																		else
+																			echo "<option value='".$row['FID']."'>". $row['NAME'] ."</option>";
 																	}
 																?>
 																</select>
 															</div>
 														</div>
 														<div class="span3">
-															<div id="divname" class="form-group">
-																<label>Customer Name*</label>
-																<input  class="form-control" type="text" id="name" name="name" placeholder="Customer Name"/>
-															</div>
-														</div>
-
-														<div class="span3">
-															<div id="divaddress" class="form-group">
-																<label>Address*</label>
-																<input  class="form-control" type="text" id="address" name="address" placeholder="Address"/>
-															</div>
-														</div>
-													</div>
-													<div class="row-fluid">
-														<div class="span3">
 															<div id="divorderid" class="form-group">
 																<label>Order Id</label>
-																<input  class="form-control" type="text" id="orderid" name="orderid" placeholder="Order Id"/>
+																<input  class="form-control" type="text" id="orderid" name="orderid" placeholder="Order Id" value="<?php echo $orderid; ?>"/>
 															</div>
 														</div>
 														<div class="span3">
 															<div id="divreturnid" class="form-group">
-																<label>Return Id</label>
-																<input  class="form-control" type="text" id="returnid" name="returnid" placeholder="Return Id"/>
+																<label>Sales Return Id</label>
+																<input  class="form-control" type="text" id="returnid" name="returnid" placeholder="Return Id" value="<?php echo $returnid; ?>"/>
 															</div>
 														</div>
 														<div class="span3">
 															<div id="divorderdate" class="form-group">
 																<label>Order Date</label>
-																<input  class="form-control" type="text" id="orderdate" name="orderdate" placeholder="Order Date"/>
-															</div>
-														</div>
-														<div class="span3">
-															<div id="divinvoice" class="form-group">
-																<label>Invoice Number</label>
-																<input  class="form-control" type="text" id="invoice" name="invoice" placeholder="Invoice Number"/>
-															</div>
-														</div>
-												</div>
-												</div>
-											</div>
-										</div>
-										<div class="tab-pane" id="tab2">
-											<div class="panel panel-default"  style="margin-top:10px;">
-												<!--<div class="panel-heading">
-													Order Details
-												</div>-->
-												<div class="panel-body">
-													<div class="row-fluid">
-														<div class="span3">
-															<div id="divsrnno" class="form-group">
-																<label>SRN No (Manual Apex/SAP)</label>
-																<input class="form-control" type="text" id="srnno" name="srnno" placeholder="SRN No"/>
-															</div>
-														</div>
-														<div class="span3">
-															<div id="divreturn_initiate_date" class="form-group">
-																<label>Return Initiate Date</label>
-																<input class="form-control" type="text" id="return_initiate_date" name="return_initiate_date" placeholder="Return Initiate Date"/>
+																<input  class="form-control" type="text" id="orderdate" name="orderdate" placeholder="Order Date" value="<?php echo date('d-m-Y',$orderdate); ?>"/>
 															</div>
 														</div>
 
+														<!--<div class="span3">
+															<div id="divaddress" class="form-group">
+																<label>Address</label>
+																<input  class="form-control" type="text" id="address" name="address" placeholder="Address" value="<?php echo $address; ?>"/>
+															</div>
+														</div>-->
+													</div>
+													<div class="row-fluid">
 														<div class="span3">
-															<div id="divreturn_rece_date" class="form-group">
-																<label>Return Received Date</label>
-																<input class="form-control" type="text" id="return_rece_date" name="return_rece_date" placeholder="Return Received Date"/>
+															<div id="divreturn_initiate_date" class="form-group">
+																<label>Return Initiate Date</label>
+																<input class="form-control" type="text" id="return_initiate_date" name="return_initiate_date" value="<?php  if(strlen($return_initiate_date)>0) echo date('d-m-Y',$return_initiate_date); ?>" placeholder="Return Initiate Date"/>
 															</div>
 														</div>
 														
 														<div class="span3">
-															<div id="divupc" class="form-group">
-																<label>UPC</label>
-																<input class="form-control" type="text" id="upc" name="upc" placeholder="UPC"/>
+															<div id="divreturn_rece_date" class="form-group">
+																<label>Return Received Date</label>
+																<input class="form-control" type="text" id="return_rece_date" name="return_rece_date" value="<?php if(strlen($return_rece_date)>0) echo date('d-m-Y',$return_rece_date); ?>" placeholder="Return Received Date"/>
+															</div>
+														</div>
+														
+														<div class="span3">
+															<div id="divpartno" class="form-group">
+																<label>Part No</label>
+																<input class="form-control" type="text" id="partno" name="partno" placeholder="Part No" value="<?php echo $partno; ?>" />
+															</div>
+														</div>
+														
+														<div class="span3">
+															<div id="divinvoice" class="form-group">
+																<label>Invoice Number</label>
+																<input  class="form-control" type="text" id="invoice" name="invoice" placeholder="Invoice Number" value="<?php echo $invoice; ?>" />
 															</div>
 														</div>
 													</div>
 													<div class="row-fluid">
 														<div class="span3">
-															<div id="divpartno" class="form-group">
-																<label>Part No</label>
-																<input class="form-control" type="text" id="partno" name="partno" placeholder="Part No"/>
+															<div id="divsrnno" class="form-group">
+																<label>SRN No (Manual Apex/SAP)</label>
+																<input class="form-control" type="text" id="srnno" name="srnno" value="<?php echo $srnno; ?>" placeholder="SRN No"/>
 															</div>
 														</div>
+														
 														<div class="span3">
-															<div class="form-group">
-																
+															<div id="divname" class="form-group">
+																<label>Customer Name</label>
+																<input  class="form-control" type="text" id="name" name="name" placeholder="Customer Name" value="<?php echo $name; ?>"/>
 															</div>
 														</div>
-														<div class="span3">
-															<div class="form-group">
-																
-															</div>
-														</div>
-														<div class="span3">
-															<div class="form-group">
-																
-															</div>
-														</div>
+														
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="tab-pane" id="tab3">
+										
+										<div class="tab-pane" id="tab2">
 											<div class="panel panel-default"  style="margin-top:10px;">
 												<!--<div class="panel-heading">
 													Order Details
@@ -527,27 +485,78 @@
 														<div class="span3">
 															<div id="divdescription" class="form-group">
 																<label>Description</label>
-																<input class="form-control" type="text" id="description" name="description" placeholder="Description"/>
+																<input class="form-control" type="text" id="description" name="description" placeholder="Description" value="<?php echo $description; ?>"/>
 															</div>
 														</div>
 														<div class="span3">
 															<div id="divcategory" class="form-group">
 																<label>Category</label>
-																<input class="form-control" type="text" id="category" name="category" placeholder="Category"/>
+																<input class="form-control" type="text" id="category" name="category" placeholder="Category" value="<?php echo $category; ?>"/>
 															</div>
 														</div>
 
 														<div class="span3">
 															<div id="divqty" class="form-group">
 																<label>Quantity</label>
-																<input class="form-control" type="text" id="qty" name="qty" placeholder="Qty"/>
+																<input class="form-control" type="text" id="qty" name="qty" placeholder="Qty" value="<?php echo $qty; ?>"/>
 															</div>
 														</div>
 														
 														<div class="span3">
 															<div id="divcost" class="form-group">
 																<label>Cost/Unit</label>
-																<input class="form-control" type="text" id="cost" name="cost" placeholder="Cost"/>
+																<input class="form-control" type="text" id="cost" name="cost" placeholder="Cost"  onChange="calculateTotalAmount()"  onBlur="calculateTotalAmount()" value="<?php echo $cost; ?>"/>
+															</div>
+														</div>
+													</div>
+													<div class="row-fluid">
+														<div class="span3">
+															<div id="divupc" class="form-group">
+																<label>UPC</label>
+																<input class="form-control" type="text" id="upc" name="upc" placeholder="UPC" value="<?php echo $upc; ?>"/>
+															</div>
+														</div>
+														
+														<div class="span3">
+															<div class="form-group">
+																<div class="form-group">
+																	<input class="form-control" type="hidden" id="hashordertrackingid" name="hashordertrackingid" value="<?php echo $hashordertrackingid; ?>" />
+																</div>
+															</div>
+														</div>
+														<div class="span3">
+															<div id="divmrp" class="form-group">
+																<label>MRP/Invoice Value</label>
+																<input  class="form-control" type="text" id="mrp" name="mrp" placeholder="Invoice Value" value="<?php echo $mrp; ?>"/>
+															</div>
+														</div>
+														<div class="span3">
+															<div id="divtotal" class="form-group">
+															<label>Margin Value</label>
+															<input class="form-control" type="text" id="total" name="total" placeholder="Total Cost" disabled="" value="<?php echo $total; ?>"/>
+															</div>
+														</div>
+													</div>
+													<div class="row-fluid">
+														<div class="span3">
+															<div class="form-group">
+														
+															</div>
+														</div>
+														<div class="span3">
+															<div class="form-group">
+														
+															</div>
+														</div>
+														<div class="span3">
+															<div class="form-group">
+														
+															</div>
+														</div>
+														<div class="span3">
+															<div id="divreimbursed" class="form-group">
+																<label>Reimbursed</label>
+																<input class="form-control" type="text" id="reimbursed" name="reimbursed" value="<?php echo $reimbursed; ?>" placeholder="Reimbursed"/>
 															</div>
 														</div>
 													</div>
@@ -563,22 +572,23 @@
 															</div>
 														</div>
 														<div class="span3">
-															<div id="divmrp" class="form-group">
-																<label>MRP/Invoice Value</label>
-																<input  class="form-control" type="text" id="mrp" name="mrp" placeholder="Invoice Value"/>
+															<div id="divrecovermin" class="form-group">
+																<label>Recovery Min</label>
+																<input class="form-control" type="text" disabled id="recovermin" name="recovermin"  placeholder="Recovery Max"/>
 															</div>
 														</div>
 														<div class="span3">
-															<div id="divtotal" class="form-group">
-															<label>Total Cost Value</label>
-															<input class="form-control" type="text" id="total" name="total" placeholder="Total Cost"/>
+															<div id="divrecovermax" class="form-group">
+																<label>Recovery Max</label>
+																<input class="form-control" type="text" disabled id="recovermax" name="recovermax" placeholder="Recovery Max"/>
 															</div>
 														</div>
+														
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="tab-pane" id="tab4">
+										<div class="tab-pane" id="tab3">
 											<div class="panel panel-default"  style="margin-top:10px;">
 												<!--<div class="panel-heading">
 													Order Details
@@ -588,28 +598,21 @@
 														<div class="span3">
 															<div id="divreturn_awb_no" class="form-group">
 																<label>Return AWB No</label>
-																<input class="form-control" type="text" id="return_awb_no" name="return_awb_no" placeholder="Return AWB No"/>
+																<input class="form-control" type="text" id="return_awb_no" name="return_awb_no" value="<?php echo $return_awb_no; ?>" placeholder="Return AWB No"/>
 															</div>
 														</div>
+														
 														<div class="span3">
-															<div id="divdisposition" class="form-group">
-																<label>Disposition</label>
-																<select class="form-control"  id="disposition" name="disposition">
-																	<option value="">Select Disposition</option>
-																	<?php
-																		foreach($dispositiondetails as $row)
-																		{
-																			echo "<option value='".$row['DID']."'>". $row['NAME'] ."</option>";
-																		}
-																	?>
-																</select>
+															<div id="divapx_bill_no" class="form-group">
+																<label>APX Bill No</label>
+																<input class="form-control" type="text" id="apx_bill_no" name="apx_bill_no" value="<?php echo $apx_bill_no; ?>" placeholder="APX Bill No"/>
 															</div>
 														</div>
 
 														<div class="span3">
 															<div id="divincidentid" class="form-group">
 																<label>Incident ID</label>
-																<input class="form-control" type="text" id="incidentid" name="incidentid" placeholder="Incident ID"/>
+																<input class="form-control" type="text" id="incidentid" name="incidentid" value="<?php echo $incidentid; ?>" placeholder="Incident ID"/>
 															</div>
 														</div>
 														
@@ -629,24 +632,34 @@
 																	<?php
 																		foreach($procondtiondetails as $row)
 																		{
-																			echo "<option value='".$row['PCID']."'>". $row['NAME'] ."</option>";
+																			if($product == $row['PCID'])
+																				echo "<option selected value='".$row['PCID']."'>". $row['NAME'] ."</option>";
+																			else
+																				echo "<option value='".$row['PCID']."'>". $row['NAME'] ."</option>";
 																		}
 																	?>
 																</select>
 															</div>
 														</div>
+														
 														<div class="span3">
-															<div id="divreimbursed" class="form-group">
-																<label>Reimbursed</label>
-																<input class="form-control" type="text" id="reimbursed" name="reimbursed" placeholder="Reimbursed"/>
+															<div id="divdisposition" class="form-group">
+																<label>Disposition</label>
+																<select class="form-control"  id="disposition" name="disposition">
+																	<option value="">Select Disposition</option>
+																	<?php
+																		foreach($dispositiondetails as $row)
+																		{
+																			if($disposition == $row['DID'])
+																				echo "<option selected value='".$row['DID']."'>". $row['NAME'] ."</option>";
+																			else
+																				echo "<option value='".$row['DID']."'>". $row['NAME'] ."</option>";
+																		}
+																	?>
+																</select>
 															</div>
 														</div>
-														<div class="span3">
-															<div id="divapx_bill_no" class="form-group">
-																<label>APX Bill No</label>
-																<input class="form-control" type="text" id="apx_bill_no" name="apx_bill_no" placeholder="APX Bill No"/>
-															</div>
-														</div>
+														
 														<div class="span3">
 															<div id="divstatus" class="form-group">
 																<label>Status</label>
@@ -655,7 +668,10 @@
 																	<?php
 																		foreach($statusdetails as $row)
 																		{
-																			echo "<option value='".$row['SID']."'>". $row['NAME'] ."</option>";
+																			if($status == $row['SID'])
+																				echo "<option selected value='".$row['SID']."'>". $row['NAME'] ."</option>";
+																			else
+																				echo "<option value='".$row['SID']."'>". $row['NAME'] ."</option>";
 																		}
 																	?>
 																</select>
@@ -664,6 +680,98 @@
 													</div>
 												</div>
 											</div>
+										</div>
+										<div class="tab-pane" id="tab4">
+											<div class="panel panel-default"  style="margin-top:10px;">
+												<div class="panel-body">
+													<div class="row-fluid">
+														<div class="span4">
+															<div id="divcase" class="form-group">
+																<label>Case Id</label>
+																<input class="form-control" type="text" id="casedetails" name="casedetails" placeholder="Case Details"/>
+															</div>
+														</div>
+														<div class="span4">
+															<div class="form-group">
+																<label>Case Ticket Logged Date</label>
+																<input class="form-control" type="text" id="casedate" name="casedate" placeholder="Case Date"/>
+															</div>
+														</div>
+														<div class="span4">
+															<div class="form-group">
+															
+															</div>
+														</div>
+													</div>
+													<div class="row-fluid">
+														<div class="span6">
+															<div id="divcase" class="form-group">
+																<label>Notes:</label>
+																<textarea rows="3" id="notes" name="notes" class="form-control"></textarea>
+															</div>
+														</div>
+														<div class="span6">
+															<div class="form-group">
+															
+															</div>
+														</div>
+													</div>
+													
+												</div>
+											</div>
+											
+											<div class="row-fluid">
+														<div class="span12">
+															<div class="panel panel-default">
+																<div class="panel-heading">
+																	Case Details
+																</div>
+																<!-- /.panel-heading -->
+																<div class="panel-body">
+																	<div class="table-responsive">
+																		<table class="table">
+																			<thead>
+																				<tr>
+																					<th>#</th>
+																					<th>Case ID</th>
+																					<th>Case Date</th>
+																					<th>Notes</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																			<?php
+																			$clsrow = array(
+																				0=>'success',
+																				1=>'info',
+																				2=>'warning',
+																				3=>'danger'
+																			);
+																			$j = 1;
+																			$i = 0;
+																			foreach($casedetails as $caserow)
+																			{
+																				if($i == 4)
+																					$i = 0;
+																				echo "<tr class='".$clsrow[$i]."'>";
+																				echo "<td>".$j."</td>";
+																				echo "<td>".$caserow['casedetails']."</td>";
+																				echo "<td>".date('d-m-Y',$caserow['casedate'])."</td>";
+																				echo "<td>".$caserow['casenotes']."</td>";
+																				echo "</tr>";					
+																				$j++;
+																				$i++;
+																			}
+																			?>
+																			</tbody>
+																		</table>
+																	</div>
+																	<!-- /.table-responsive -->
+																</div>
+																<!-- /.panel-body -->
+															</div>
+														</div>
+													</div>
+												
 										</div>
 										<ul class="pager wizard">
 											<li class="previous first" style="display:none;"><a href="#">First</a></li>
@@ -675,7 +783,7 @@
 								</div>
                         </div>
                         <div class="panel-footer" align="center">
-                            <button id="submit" name="submit_button" class="btn btn-outline btn-primary" type="submit"><i class="fa fa-check"></i>Save</button>
+                            <button id="submit" name="submit_button" class="btn btn-outline btn-primary" type="submit"><i class="fa fa-check"></i>Update</button>
                         </div>
                     </div>
 					</form>
@@ -708,6 +816,7 @@
     <!-- /#wrapper -->
 	<!-- jQuery -->
     <script src="<?php echo base_url();?>assets/jquery/jquery.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 	
 	<!-- Bootstrap Core JavaScript -->
     
@@ -729,12 +838,11 @@
 	  	$('#rootwizard').bootstrapWizard({'tabClass': 'nav nav-pills'});	
 		window.prettyPrint && prettyPrint();
 	
-		/*
 		$("#orderdate").datepicker({
 			dateFormat:"dd-mm-yy",
 			yearRange: '1920:2020',
 			minDate: new Date(),
-			maxDate: "01-01-1920",
+			maxDate: "01-01-2020",
 			changeMonth: true,
 			changeYear: true
 		});
@@ -743,7 +851,7 @@
 			dateFormat:"dd-mm-yy",
 			yearRange: '1920:2020',
 			minDate: new Date(),
-			maxDate: "01-01-1920",
+			maxDate: "01-01-2020",
 			changeMonth: true,
 			changeYear: true
 		});
@@ -752,10 +860,10 @@
 			dateFormat:"dd-mm-yy",
 			yearRange: '1920:2020',
 			minDate: new Date(),
-			maxDate: "01-01-1920",
+			maxDate: "01-01-2020",
 			changeMonth: true,
 			changeYear: true
-		});*/
+		});
 	});	
 	
 	
@@ -786,161 +894,186 @@
 		var apx_bill_no = $("#apx_bill_no").val();
 		var status = $("#status").val();
 		
+		var errorstr = "";
 		var valid = true;
 		if(fullfillment == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please select fullfillment!</div><BR/>";
 			$('#divfullfillment').addClass('has-error');
 			valid = false;
 		}
 		
 		if(name == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter Name!</div><BR/>";
 			$('#divname').addClass('has-error');
 			valid = false;
 		}
-		
+		/*
 		if(address == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter Address!</div><BR/>";
 			$('#divaddress').addClass('has-error');
 			valid = false;
-		}
+		}*/
 		
 		if(orderid == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter Orderid!</div><BR/>";
 			$('#divorderid').addClass('has-error');
 			valid = false;
 		}
-		
+		/*
 		if(returnid == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter ReturnId!</div><BR/>";
 			$('#divreturnid').addClass('has-error');
 			valid = false;
-		}
+		}*/
 		
 		if(orderdate == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please select order date!</div><BR/>";
 			$('#divorderdate').addClass('has-error');
 			valid = false;
 		}
 		
 		if(invoice == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter Invoice Id!</div><BR/>";
 			$('#divinvoice').addClass('has-error');
 			valid = false;
 		}
 		
 		if(srnno == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please select SRN Number!</div><BR/>";
 			$('#divsrnno').addClass('has-error');
 			valid = false;
 		}
-		
+		/*
 		if(return_initiate_date == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter return initiate date!</div><BR/>";
 			$('#divreturn_initiate_date').addClass('has-error');
 			valid = false;
 		}
-		
-		
+				
 		if(return_rece_date == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter return received date!</div><BR/>";
 			$('#divreturn_rece_date').addClass('has-error');
 			valid = false;
-		}
+		}*/
 		
 		if(upc == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter UPC!</div><BR/>";
 			$('#divupc').addClass('has-error');
 			valid = false;
 		}
 		
 		if(partno == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter Part Number!</div><BR/>";
 			$('#divpartno').addClass('has-error');
 			valid = false;
 		}
 		
 		if(description == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter Description!</div><BR/>";
 			$('#divdescription').addClass('has-error');
 			valid = false;
 		}
 		
 		if(category == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter category!</div><BR/>";
 			$('#divcategory').addClass('has-error');
 			valid = false;
 		}
 		
 		if(qty == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter qty!</div><BR/>";
 			$('#divqty').addClass('has-error');
 			valid = false;
 		}
 		
 		if(cost == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter cost!</div><BR/>";
 			$('#divcost').addClass('has-error');
 			valid = false;
 		}
 		
 		if(mrp == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter MRP!</div><BR/>";
 			$('#divmrp').addClass('has-error');
 			valid = false;
 		}
 		
 		if(total == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter total!</div><BR/>";
 			$('#divtotal').addClass('has-error');
 			valid = false;
 		}
 		
 		if(return_awb_no == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter AWB Number!</div><BR/>";
 			$('#divreturn_awb_no').addClass('has-error');
 			valid = false;
 		}
 		
 		if(disposition == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter disposition!</div><BR/>";
 			$('#divdisposition').addClass('has-error');
 			valid = false;
 		}
-		
+		/*
 		if(incidentid == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter Incident Id!</div><BR/>";
 			$('#divincidentid').addClass('has-error');
 			valid = false;
-		}
+		}*/
 		
 		if(product == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter product!</div><BR/>";
 			$('#divproduct').addClass('has-error');
 			valid = false;
 		}
-		
+		/*
 		if(reimbursed == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter reimburse!</div><BR/>";
 			$('#divreimbursed').addClass('has-error');
 			valid = false;
 		}
 		
 		if(apx_bill_no == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please enter apx bill number!</div><BR/>";
 			$('#divapx_bill_no').addClass('has-error');
 			valid = false;
 		}
-		
+		*/
 		if(status == '')
 		{
+			errorstr += "<div class='alert alert-danger'>Please select status!</div><BR/>";
 			$('#divstatus').addClass('has-error');
 			valid = false;
 		}
 		
 		if(!valid)
 		{
-			$(".modal-body").html("-"+status+"-");
+			$(".modal-body").html(errorstr);
 			$('#myModal').modal('toggle');
 		}
 		return valid;
@@ -957,6 +1090,18 @@
 		eleid = "#div"+$(this).attr('id');
 		$(eleid).removeClass('has-error');
 	});
+	
+	function calculateTotalAmount(){
+		var qty = parseInt($("#qty").val(),10);
+		var cost = parseFloat($("#cost").val(),10);
+		
+		
+		if((qty !="" || qty != 0 ) && (cost !="" || cost != 0 ))
+		{
+			var tot = qty * cost;
+			$("#total").val(tot);
+		}
+	}
 	</script>
   
 </body>
