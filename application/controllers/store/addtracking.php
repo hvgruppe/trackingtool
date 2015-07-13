@@ -40,8 +40,10 @@ class Addtracking extends CI_Controller {
 		{
 			$data = array();
 			$casedata = array();
+			$productdata = array();
 			
 			$data['fullfillment'] = $this->input->post('fullfillment');
+			$data['itemrece'] = $this->input->post('itemrece');
 			$data['name'] = mysql_real_escape_string($this->input->post('name'));
 			$data['address'] = mysql_real_escape_string($this->input->post('address'));
 			$data['orderid'] = $this->input->post('orderid');
@@ -51,24 +53,23 @@ class Addtracking extends CI_Controller {
 			$data['srnno'] = $this->input->post('srnno');
 			$data['return_initiate_date'] = strtotime($this->input->post('return_initiate_date'));
 			$data['return_rece_date'] = strtotime($this->input->post('return_rece_date'));
-			$data['upc'] = $this->input->post('upc');
 			$data['partno'] = $this->input->post('partno');
-			$data['description'] = $this->input->post('description');
-			$data['category'] = $this->input->post('category');
-			$data['qty'] = $this->input->post('qty');
-			$data['cost'] = $this->input->post('cost');
-			$data['mrp'] = $this->input->post('mrp');
-			$data['total'] = $this->input->post('total');
+			$data['remarks'] = $this->input->post('remarks');
+
+			$data['invoice_date'] = strtotime($this->input->post('invoice_date'));
 			$data['return_awb_no'] = $this->input->post('return_awb_no');
 			$data['disposition'] = $this->input->post('disposition');
 			$data['incidentid'] = $this->input->post('incidentid');
 			$data['product'] = $this->input->post('product');
-			$data['reimbursed'] = $this->input->post('reimbursed');
 			$data['apx_bill_no'] = $this->input->post('apx_bill_no');
 			$data['status'] = $this->input->post('status');
+			$data['caseid'] = $this->input->post('casedetails');
+			if(strlen($this->input->post('casedate'))>4)
+				$data['casedate'] = strtotime($this->input->post('casedate'));
+			else
+				$data['casedate'] = $this->input->post('casedate');
 			
-			$casedata['casedetails'] = $this->input->post('casedetails');
-			$casedata['casedate'] = strtotime($this->input->post('casedate'));
+			$casedata['caseid'] = $this->input->post('casedetails');
 			$casedata['casenotes'] = $this->input->post('notes');
 			
 			$data['createdby'] = 1; //$this->session->user
@@ -76,11 +77,23 @@ class Addtracking extends CI_Controller {
 			$data['lastmodifiedby'] = 1; //$this->session->user
 			$data['lastmodifieddate'] = time();
 			$data['numberofmodification'] = 1;
+			/*
+			$productdata['upc'] = $this->input->post('upc');
+			$productdata['description'] = $this->input->post('description');
+			$productdata['category'] = $this->input->post('category');
+			$productdata['qty'] = $this->input->post('qty');
+			$productdata['cost'] = $this->input->post('cost');
+			$productdata['mrp'] = $this->input->post('mrp');
+			$productdata['total'] = $this->input->post('total');
+			$productdata['reimbursed'] = $this->input->post('reimbursed');
+			$productdata['number_of_entries'] = $this->input->post('number_of_entries');
+			*/
 			
 			$this->load->model('trackingmodel');
-			$id = $this->trackingmodel->add_tracking($data, $casedata);
+			$id = $this->trackingmodel->add_tracking($data, $casedata,$productdata);
 			//echo $id;
 			// echo site_url('admin/managingtrack');
+			
 			redirect('store/managingtrack');
 		}
 	}

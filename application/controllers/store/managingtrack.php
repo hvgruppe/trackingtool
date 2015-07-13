@@ -104,6 +104,13 @@ class Managingtrack extends CI_Controller {
 			else
 				$data['return_rece_date'] = $this->input->post('return_rece_date');
 			
+			if(strlen($this->input->post('invoice_date'))>4)
+				$data['invoice_date'] = strtotime($this->input->post('invoice_date'));
+			else
+				$data['invoice_date'] = $this->input->post('invoice_date');
+			
+			
+			
 			$data['upc'] = $this->input->post('upc');
 			$data['partno'] = $this->input->post('partno');
 			$data['description'] = $this->input->post('description');
@@ -120,11 +127,17 @@ class Managingtrack extends CI_Controller {
 			$data['reimbursed'] = $this->input->post('reimbursed');
 			$data['apx_bill_no'] = $this->input->post('apx_bill_no');
 			$data['status'] = $this->input->post('status');
+			$data['caseid'] = $this->input->post('casedetails');
+			
+			if(strlen($this->input->post('casedate'))>4)
+				$data['casedate'] = strtotime($this->input->post('casedate'));
+			else
+				$data['casedate'] = $this->input->post('casedate');
 			
 			$data['hashordertrackingid'] = $this->input->post('hashordertrackingid'); //$this->session->user
 			
-			$casedata['casedetails'] = $this->input->post('casedetails');
-			$casedata['casedate'] = strtotime($this->input->post('casedate'));
+			$casedata['caseid'] = $this->input->post('caseid');
+			
 			$casedata['casenotes'] = $this->input->post('notes');
 			
 			$this->load->model('trackingmodel');

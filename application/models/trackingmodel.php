@@ -1,7 +1,7 @@
 <?php 
 class Trackingmodel extends CI_Model {
 
-	public function add_tracking($data, $casedata)
+	public function add_tracking($data, $casedata, $productdata)
 	{
 		$this->db->insert('ips_ordertracking', $data); 
 		$autoid = $this->db->insert_id();
@@ -13,8 +13,105 @@ class Trackingmodel extends CI_Model {
 		$this->db->set('hashordertrackingid', $hashorderid);
 		
 		$this->db->update('ips_ordertracking');
+		
+		if($this->input->post('number_of_entries')>=0)
+		{
+			$cntitem = $this->input->post('number_of_entries') + 1;
+			for($i=0;$i<$cntitem;$i++)
+			{
+				$upc = 'upc'.$i;
+				$description = 'description'.$i;
+				$category = 'category'.$i;
+				$qty = 'qty'.$i;
+				$cost = 'cost'.$i;
+				$mrp = 'mrp'.$i;
+				$reimbursed = 'reimbursed'.$i;
+				if($this->input->post($description) != "")
+				{
+					$productdata['ordertrackingid'] = $orderid;
+					$productdata['upc'] = $this->input->post($upc);
+					$productdata['description'] = $this->input->post($description);
+					$productdata['category'] = $this->input->post($category);
+					$productdata['qty'] = $this->input->post($qty);
+					$productdata['cost'] = $this->input->post($cost);
+					$productdata['mrp'] = $this->input->post($mrp);
+					$productdata['reimbursed'] = $this->input->post($reimbursed);
+					$this->db->insert('ips_productitems', $productdata); 
+					// $proid = $this->db->insert_id();
+				}
+				
+				
+			}
+		}
+		
+		if($this->input->post('number_of_img')>0)
+		{
 
-		if($casedata['casedate'] != "")
+			$lenimg = $this->input->post('number_of_img') + 1;
+			// echo $lenimg;
+			for($i=0;$i<$lenimg;$i++)
+			{
+				$file_path = "productimages/";
+				$uploadfile = 'uploadfile'.$i;
+				$chkfilename = $_FILES[$uploadfile]['name'];
+				if($chkfilename != "")
+				{
+					if($_FILES[$uploadfile]['error'] != 0)
+						continue;
+					else
+					{
+						
+						$filename = basename($_FILES[$uploadfile]['name']);
+						
+						$ext = substr($filename, strrpos($filename, '.') + 1);
+						if ((preg_match("/jpeg/i",$ext))||(preg_match("/jpg/i",$ext))||(preg_match("/png/i",$ext))||(preg_match("/gif/i",$ext) ) && ($_FILES[$uploadfile]["size"] < 500000)) 
+						{
+						
+							$fileName = $_FILES[$uploadfile]['name'];
+							$tmpName  = $_FILES[$uploadfile]['tmp_name'];
+							$fileSize = $_FILES[$uploadfile]['size'];
+							$fileType = $_FILES[$uploadfile]['type'];
+							$name = explode('.',$fileName);
+							$file=$name[0];
+							
+							$fp      = fopen($tmpName, 'r');
+							$content = fread($fp, filesize($tmpName));
+							$content = addslashes($content);
+							fclose($fp);
+							if(!get_magic_quotes_gpc())
+							{
+								$fileName = addslashes($fileName);
+							}
+							$fileName = md5($fileName.$name.time());
+							$fileName=	$fileName.".".$ext;
+							
+							if(!is_dir($file_path))
+							{
+								mkdir($file_path,0777);
+							}
+							$file_path = $file_path.$orderid."/";
+							if(!is_dir($file_path))
+							{
+								mkdir($file_path,0777);
+							}
+							move_uploaded_file($_FILES[$uploadfile]["tmp_name"],$file_path . $fileName);
+							
+							if($fileName != "")
+							{
+								$imgdata['ordertrackingid'] = $orderid;
+								$imgdata['imgname'] = $fileName;
+								$imgdata['imgtype'] = $fileSize;
+								$imgdata['imgsize'] = $fileType;
+								$this->db->insert('ips_productimg', $imgdata); 
+								$caseid = $this->db->insert_id();	
+							}
+						}
+					}	
+				}
+			}
+		}
+		
+		if($casedata['casenotes'] != "")
 		{
 			$casedata['ordertrackingid'] = $orderid;
 			$this->db->insert('ips_case', $casedata); 
@@ -32,7 +129,7 @@ class Trackingmodel extends CI_Model {
 		$this->db->where('hashordertrackingid', $hashordertrackingid);
 		$str = $this->db->update('ips_ordertracking', $data);
 			
-		if($casedata['casedate'] != "")
+		if($casedata['casenotes'] != "")
 		{
 			$ordertrackingid = '';
 			$query = $this->db->query("select ordertrackingid from ips_ordertracking where hashordertrackingid='".$hashordertrackingid."'");
@@ -66,9 +163,11 @@ class Trackingmodel extends CI_Model {
 			foreach($result as $row)
 			{
 				$data['fullfillment'] = $row['fullfillment'];
+				$data['itemrece'] = $row['itemrece'];
 				$data['name'] = $row['name'];
 				$data['address'] = $row['address'];
 				$data['orderid'] = $row['orderid'];
+				$data['ordertrackingid'] = $row['ordertrackingid'];
 				$data['hashordertrackingid'] = $row['hashordertrackingid'];
 				$data['returnid'] = $row['returnid'];
 				$data['orderdate'] = $row['orderdate'];
@@ -76,21 +175,16 @@ class Trackingmodel extends CI_Model {
 				$data['srnno'] = $row['srnno'];
 				$data['return_initiate_date'] = $row['return_initiate_date'];
 				$data['return_rece_date'] = $row['return_rece_date'];
-				$data['upc'] = $row['upc'];
 				$data['partno'] = $row['partno'];
-				$data['description'] = $row['description'];
-				$data['category'] = $row['category'];
-				$data['qty'] = $row['qty'];
-				$data['cost'] = $row['cost'];
-				$data['mrp'] = $row['mrp'];
-				$data['total'] = $row['total'];
 				$data['return_awb_no'] = $row['return_awb_no'];
 				$data['disposition'] = $row['disposition'];
 				$data['incidentid'] = $row['incidentid'];
 				$data['product'] = $row['product'];
-				$data['reimbursed'] = $row['reimbursed'];
 				$data['apx_bill_no'] = $row['apx_bill_no'];
 				$data['status'] = $row['status'];
+				$data['remarks'] = $row['remarks'];
+				$data['caseid'] = $row['caseid'];
+				$data['casedate'] = $row['casedate'];
 				
 				$this->db->select('*');
 				$this->db->from('ips_case');
@@ -109,14 +203,56 @@ class Trackingmodel extends CI_Model {
 					$i = 0;
 					foreach($caseresult as $caserow)
 					{
-						$casedata[$i]['casedetails'] = $caserow['casedetails'];
-						$casedata[$i]['casedate'] = $caserow['casedate'];
+						$casedata[$i]['casedetails'] = $caserow['caseid'];
 						$casedata[$i]['casenotes'] = $caserow['casenotes'];
 						$i++;
 					}
 				}
 				$data['casedetails'] = $casedata;
 				
+				$this->db->select('*');
+				$this->db->from('ips_productimg');
+				$this->db->where('ordertrackingid', $row['ordertrackingid']);
+				$imgdata = array();
+				$imgquery = $this->db->get();
+				
+				if($imgquery->num_rows() > 0)
+				{
+					$imgresult = $imgquery->result_array();
+					$i = 0;
+					foreach($imgresult as $imgrow)
+					{
+						$imgdata[$i]['imagename'] = $imgrow['imgname'];
+						$i++;
+					}
+				}
+				$data['imagedetails'] = $imgdata;
+				
+				
+				$this->db->select('*');
+				$this->db->from('ips_productitems');
+				$this->db->where('ordertrackingid', $row['ordertrackingid']);
+				$itemdata = array();
+				$itemquery = $this->db->get();
+				
+				if($itemquery->num_rows() > 0)
+				{
+					$itemresult = $itemquery->result_array();
+					$i = 0;
+					foreach($itemresult as $itemrow)
+					{
+						$itemdata[$i]['upc'] = $itemrow['upc'];
+						$itemdata[$i]['serial'] = $itemrow['serial'];
+						$itemdata[$i]['description'] = $itemrow['description'];
+						$itemdata[$i]['category'] = $itemrow['category'];
+						$itemdata[$i]['qty'] = $itemrow['qty'];
+						$itemdata[$i]['cost'] = $itemrow['cost'];
+						$itemdata[$i]['mrp'] = $itemrow['mrp'];
+						$itemdata[$i]['reimbursed'] = $itemrow['reimbursed'];
+						$i++;
+					}
+				}
+				$data['itemdetails'] = $itemdata;
 				return $data;
 			}
 			
