@@ -217,6 +217,8 @@ class Trackingmodel extends CI_Model {
 				$data['hashordertrackingid'] = $row['hashordertrackingid'];
 				$data['returnid'] = $row['returnid'];
 				$data['orderdate'] = $row['orderdate'];
+				
+				$data['invoice_date'] = $row['invoice_date'];
 				$data['invoice'] = $row['invoice'];
 				$data['srnno'] = $row['srnno'];
 				$data['return_initiate_date'] = $row['return_initiate_date'];

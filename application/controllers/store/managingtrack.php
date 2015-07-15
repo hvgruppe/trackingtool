@@ -62,6 +62,23 @@ class Managingtrack extends CI_Controller {
         $this->load->view('store/managetracking',$output);    
     }
 	
+	public function viewtracking()
+	{
+		$ordertrackid = $_GET['orderid'];
+		
+		$this->load->model('trackingmodel');
+		$data = $this->trackingmodel->fetchOrderDetails($ordertrackid);
+		
+		$this->load->model('configurationmodel');
+		$data['dispositiondetails'] = $this->configurationmodel->fetchDisposition();
+		$data['fullfillmentdetails'] = $this->configurationmodel->fetchFullfillment();
+		$data['procondtiondetails'] = $this->configurationmodel->fetchProductCondition();
+		$data['statusdetails'] = $this->configurationmodel->fetchProductStatus();
+		
+		
+		$this->load->view('store/viewtracking',$data);    
+	}
+	
 	public function edittracking()
 	{
 		$ordertrackid = $_GET['orderid'];

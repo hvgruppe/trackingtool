@@ -454,7 +454,7 @@
 														<div class="span3">
 															<div id="divinvoice_date" class="form-group">
 																<label>Invoice Date</label>
-																<input class="form-control" type="text" id="invoice_date" name="invoice_date" placeholder="Invoice Date"/>
+																<input class="form-control" type="text" id="invoice_date" name="invoice_date" value="<?php  if(strlen($invoice_date)>0) echo date('d-m-Y',$invoice_date); ?>" placeholder="Invoice Date"/>
 															</div>
 														</div>
 														
@@ -785,13 +785,13 @@
 														<div class="span4">
 															<div id="divcase" class="form-group">
 																<label>Case Id</label>
-																<input class="form-control" type="text" id="casedetails" name="casedetails"  value="<?php if(strlen($caseid)>1) {echo $caseid; echo "disabled"; } ?>" placeholder="Case Details"/>
+																<input class="form-control" type="text" id="casedetails" name="casedetails"  value="<?php if(strlen($caseid)>1) {echo $caseid; } ?>" <?php if(strlen($caseid)>1) { echo 'disabled'; } ?> placeholder="Case Details"/>
 															</div>
 														</div>
 														<div class="span4">
 															<div class="form-group">
 																<label>Case Ticket Logged Date</label>
-																<input class="form-control" type="text" id="casedate" name="casedate" value="<?php if(strlen($casedate)>4){echo date('d-m-Y',$casedate); echo "disabled";} ?>" placeholder="Case Date"/>
+																<input class="form-control" type="text" id="casedate" name="casedate" value="<?php if(strlen($casedate)>4){echo date('d-m-Y',$casedate);} ?>"  <?php if(strlen($casedate)>4){echo 'disabled';} ?> placeholder="Case Date"/>
 															</div>
 														</div>
 														<div class="span4">
