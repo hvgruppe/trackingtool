@@ -1349,7 +1349,7 @@
 		$("#uploadfile"+rowID_new, clonedRow).attr("name", "uploadfile"+rowID_new);
 		
 		$("#uploadfile"+rowID_new).replaceWith($("#uploadfile"+rowID_new).val('').clone(true));
-		clonedRow.find("#uploadfile"+rowID_new).removeAttr("value");
+		clonedRow.find("#uploadfile"+rowID_new).prop("value","");
 		
 		$('#uploadtable').append(clonedRow);
 		$('#gmail_loading').hide();

@@ -494,7 +494,7 @@
 															
 															<div id="divreturn_rece_date" class="form-group">
 																<label>Return Received Date</label>
-																<input class="form-control" type="text" id="return_rece_date" name="return_rece_date" value="<?php if(strlen($return_rece_date)>0) echo date('d-m-Y',$return_rece_date); ?>" placeholder="Return Received Date"/>
+																<input class="form-control" type="text" id="return_rece_date" name="return_rece_date" value="<?php if(strlen($return_rece_date)>4) echo date('d-m-Y',$return_rece_date); ?>" placeholder="Return Received Date"/>
 															</div>
 														</div>
 														<div class="span3">
@@ -519,6 +519,7 @@
 										
 										<div class="tab-pane" id="tab2">
 											<div class="panel panel-default"  style="margin-top:10px;">
+												<input type="hidden" id="number_of_entries" name="number_of_entries" value="<?php echo count($itemdetails); ?>"/>
 												<!--<div class="panel-heading">
 													Order Details
 												</div>-->
@@ -535,6 +536,7 @@
 																<td>
 																	<label>UPC</label>
 																	<input class="form-control" type="text" id="upc<?php echo $k; ?>" name="upc<?php echo $k; ?>" placeholder="UPC" value="<?php echo $itemrow['upc']?>"/>
+																	<input class="form-control" type="hidden" id="hashordertrackingid" name="hashordertrackingid" value="<?php echo $hashordertrackingid; ?>" />
 																</td>
 															</tr>
 															<tr class="span2">
@@ -559,13 +561,13 @@
 																<td>
 																	<label>Cost</label>
 																	<input class="form-control" type="hidden" id="qty<?php echo $k; ?>" name="qty<?php echo $k; ?>" onChange="calculateTotalAmount(id,value)"  onBlur="calculateTotalAmount(id,value)"   value="<?php echo $itemrow['qty']?>" placeholder="Qty"/>
-																	<input class="form-control" type="text" id="cost<?php echo $k; ?>" name="cost<?php echo $k; ?>" placeholder="Cost" onChange="calculateTotalAmount(id,value)"  onBlur="calculateTotalAmount(id,value)"   value="<?php echo $itemrow['cost']?>"/>
+																	<input class="form-control" type="text" id="cost<?php echo $k; ?>" name="cost<?php echo $k; ?>" placeholder="Cost" onChange="calculateTotalAmount(id,value)"  onBlur="calculateTotalAmount(id,value)"   value="<?php echo number_format($itemrow['cost'], 2, '.', ''); ?>"/>
 																</td>
 															</tr>
 															<tr class="span1">
 																<td>
 																	<label>MRP</label>
-																	<input  class="form-control" type="text" id="mrp<?php echo $k; ?>" name="mrp<?php echo $k; ?>" onChange="calculateTotalAmount(id,value)"  onBlur="calculateTotalAmount(id,value)" placeholder="Invoice Value"   value="<?php echo $itemrow['mrp']?>"/>
+																	<input  class="form-control" type="text" id="mrp<?php echo $k; ?>" name="mrp<?php echo $k; ?>" onChange="calculateTotalAmount(id,value)"  onBlur="calculateTotalAmount(id,value)" placeholder="Invoice Value"   value="<?php echo number_format($itemrow['mrp'], 2, '.', ''); ?>"/>
 																</td>
 															</tr>
 															<tr class="span1">
@@ -598,21 +600,21 @@
 															<tr class="span1">
 																<td>
 																	<label>Margin</label>
-																	<input class="form-control" type="text" disabled id="total<?php echo $k; ?>" name="total<?php echo $k; ?>" value="<?php echo $tot; ?>" placeholder="Margin Value"/>
+																	<input class="form-control" type="text" disabled id="total<?php echo $k; ?>" name="total<?php echo $k; ?>" value="<?php echo number_format($tot, 2, '.', ''); ?>" placeholder="Margin Value"/>
 																</td>
 															</tr>
 															
 															<tr class="span2" style="margin-left: 0px;">
 																<td>
 																	<label>Recovery Min</label>
-																	<input class="form-control" type="text" disabled id="recovermin<?php echo $k; ?>" name="recovermin<?php echo $k; ?>" value="<?php echo $recovermin; ?>" placeholder="Recovery Min"/>
+																	<input class="form-control" type="text" disabled id="recovermin<?php echo $k; ?>" name="recovermin<?php echo $k; ?>" value="<?php echo number_format($recovermin, 2, '.', ''); ?>" placeholder="Recovery Min"/>
 																</td>
 															</tr>
 															
 															<tr class="span2">
 																<td>
 																	<label>Recovery Max</label>
-																	<input class="form-control" type="text" disabled id="recovermax<?php echo $k; ?>" name="recovermax<?php echo $k; ?>" value="<?php echo $recovermax; ?>" placeholder="Recovery Max"/>
+																	<input class="form-control" type="text" disabled id="recovermax<?php echo $k; ?>" name="recovermax<?php echo $k; ?>" value="<?php echo number_format($recovermax, 2, '.', ''); ?>" placeholder="Recovery Max"/>
 																</td>
 															</tr>
 														</tbody>
@@ -766,7 +768,7 @@
 														<div class="span4">
 															<div id="divstatus" class="form-group">
 																<label>Status</label>
-																<select class="form-control" id="status" name="status">
+																<select class="form-control" id="status" name="status" onChange="chkItemReceived()">
 																	<option value="">Select Status</option>
 																	<?php
 																		foreach($statusdetails as $row)
@@ -783,13 +785,13 @@
 														<div class="span4">
 															<div id="divcase" class="form-group">
 																<label>Case Id</label>
-																<input class="form-control" type="text" id="casedetails" name="casedetails" disabled value="<?php echo $caseid; ?>" placeholder="Case Details"/>
+																<input class="form-control" type="text" id="casedetails" name="casedetails"  value="<?php if(strlen($caseid)>1) {echo $caseid; echo "disabled"; } ?>" placeholder="Case Details"/>
 															</div>
 														</div>
 														<div class="span4">
 															<div class="form-group">
 																<label>Case Ticket Logged Date</label>
-																<input class="form-control" type="text" id="casedate" name="casedate" disabled value="<?php if($casedate!=0){echo date('d-m-Y',$casedate);} ?>" placeholder="Case Date"/>
+																<input class="form-control" type="text" id="casedate" name="casedate" value="<?php if(strlen($casedate)>4){echo date('d-m-Y',$casedate); echo "disabled";} ?>" placeholder="Case Date"/>
 															</div>
 														</div>
 														<div class="span4">
@@ -1272,6 +1274,21 @@
 			$(jrecmax).val(recovermax.toFixed(2));
 		}
 		
+	}
+	
+	function chkItemReceived()
+	{
+		var ival = $("#itemrece").val();
+		var istatus = $("#status").val();
+		if(istatus == 'SID1')
+		{
+			if(ival == 'n')
+			{
+				$("#status").val("<?php echo $status; ?>");
+				$(".modal-body").html("<div class='alert alert-warning'>Item Received is no! <BR/> Kindly verify it!</div>");
+				$('#myModal').modal('toggle');
+			}
+		}
 	}
 	</script>
   

@@ -109,22 +109,11 @@ class Managingtrack extends CI_Controller {
 			else
 				$data['invoice_date'] = $this->input->post('invoice_date');
 			
-			
-			
-			$data['upc'] = $this->input->post('upc');
 			$data['partno'] = $this->input->post('partno');
-			$data['description'] = $this->input->post('description');
-			$data['category'] = $this->input->post('category');
-			$data['qty'] = $this->input->post('qty');
-			$data['cost'] = $this->input->post('cost');
-			$data['mrp'] = $this->input->post('mrp');
-			$data['total'] = $this->input->post('cost') * $this->input->post('qty');
-			//$data['total'] = $this->input->post('total');
 			$data['return_awb_no'] = $this->input->post('return_awb_no');
 			$data['disposition'] = $this->input->post('disposition');
 			$data['incidentid'] = $this->input->post('incidentid');
 			$data['product'] = $this->input->post('product');
-			$data['reimbursed'] = $this->input->post('reimbursed');
 			$data['apx_bill_no'] = $this->input->post('apx_bill_no');
 			$data['status'] = $this->input->post('status');
 			$data['caseid'] = $this->input->post('casedetails');

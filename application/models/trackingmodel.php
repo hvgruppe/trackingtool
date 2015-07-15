@@ -21,6 +21,7 @@ class Trackingmodel extends CI_Model {
 			{
 				$upc = 'upc'.$i;
 				$description = 'description'.$i;
+				$serial = 'serial'.$i;
 				$category = 'category'.$i;
 				$qty = 'qty'.$i;
 				$cost = 'cost'.$i;
@@ -31,6 +32,7 @@ class Trackingmodel extends CI_Model {
 					$productdata['ordertrackingid'] = $orderid;
 					$productdata['upc'] = $this->input->post($upc);
 					$productdata['description'] = $this->input->post($description);
+					$productdata['serial'] = $this->input->post($serial);
 					$productdata['category'] = $this->input->post($category);
 					$productdata['qty'] = $this->input->post($qty);
 					$productdata['cost'] = $this->input->post($cost);
@@ -127,24 +129,68 @@ class Trackingmodel extends CI_Model {
 		unset($data['hashordertrackingid']);
   
 		$this->db->where('hashordertrackingid', $hashordertrackingid);
+		
 		$str = $this->db->update('ips_ordertracking', $data);
-			
-		if($casedata['casenotes'] != "")
+		$ordertrackingid = '';
+		$query = $this->db->query("select ordertrackingid from ips_ordertracking where hashordertrackingid='".$hashordertrackingid."'");
+		
+		if ($query->num_rows() > 0)
 		{
-			$ordertrackingid = '';
-			$query = $this->db->query("select ordertrackingid from ips_ordertracking where hashordertrackingid='".$hashordertrackingid."'");
-			if ($query->num_rows() > 0)
+			$row = $query->row();
+			$ordertrackingid = $row->ordertrackingid;
+		}
+		if($ordertrackingid != "")
+		{
+			if($casedata['casenotes'] != "")
 			{
-			    $row = $query->row();
-			    $ordertrackingid = $row->ordertrackingid;
-				
 				$casedata['ordertrackingid'] = $ordertrackingid;
 				$this->db->insert('ips_case', $casedata); 
 				$caseid = $this->db->insert_id();
 			}
+			
+			$this->fetchProductItem($ordertrackingid);
+			/*if($editproductdata){
+				$this->db->insert('ips_productitems_edit', $editproductdata); 
 				
+				$this->db->where('ordertrackingid', $ordertrackingid);
+				$this->db->delete('ips_productitems'); 
+			}*/
 		}
 		
+		if($this->input->post('number_of_entries')>=0)
+		{
+			$cntitem = $this->input->post('number_of_entries') + 1;
+			for($i=0;$i<$cntitem;$i++)
+			{
+				$upc = 'upc'.$i;
+				$description = 'description'.$i;
+				$serial = 'serial'.$i;
+				$category = 'category'.$i;
+				$qty = 'qty'.$i;
+				$cost = 'cost'.$i;
+				$mrp = 'mrp'.$i;
+				$reimbursed = 'reimbursed'.$i;
+				if($this->input->post($description) != "")
+				{
+					$productdata['ordertrackingid'] = $ordertrackingid;
+					$productdata['upc'] = $this->input->post($upc);
+					$productdata['description'] = $this->input->post($description);
+					$productdata['serial'] = $this->input->post($serial);
+					$productdata['category'] = $this->input->post($category);
+					$productdata['qty'] = $this->input->post($qty);
+					$productdata['cost'] = $this->input->post($cost);
+					$productdata['mrp'] = $this->input->post($mrp);
+					$productdata['reimbursed'] = $this->input->post($reimbursed);
+					$this->db->insert('ips_productitems', $productdata); 
+					// $proid = $this->db->insert_id();
+				}
+				
+				
+			}
+		}
+		
+		
+
 		return ($this->db->affected_rows() > 0) ? TRUE : FALSE;
 	}
 	
@@ -256,6 +302,40 @@ class Trackingmodel extends CI_Model {
 				return $data;
 			}
 			
+		}
+	}
+	
+	function fetchProductItem($ordertrackingid)
+	{
+		$this->db->select('*');
+		$this->db->from('ips_productitems');
+		$this->db->where('ordertrackingid', $ordertrackingid);
+		$itemdata = array();
+		$itemquery = $this->db->get();
+		$productdata = array();
+		if($itemquery->num_rows() > 0)
+		{
+			$itemresult = $itemquery->result_array();
+			$i = 0;
+			foreach($itemresult as $itemrow)
+			{
+				$itemdata['ordertrackingid'] = $ordertrackingid;
+				$itemdata['upc'] = $itemrow['upc'];
+				$itemdata['serial'] = $itemrow['serial'];
+				$itemdata['description'] = $itemrow['description'];
+				$itemdata['category'] = $itemrow['category'];
+				$itemdata['qty'] = $itemrow['qty'];
+				$itemdata['cost'] = $itemrow['cost'];
+				$itemdata['mrp'] = $itemrow['mrp'];
+				$itemdata['reimbursed'] = $itemrow['reimbursed'];
+				$itemdata['timestamp'] = time();
+				$itemdata['modifiedby'] = $this->session->userdata('roleid');
+				
+				$this->db->insert('ips_productitems_edit', $itemdata); 
+				
+			}
+			$this->db->where('ordertrackingid', $ordertrackingid);
+			$this->db->delete('ips_productitems'); 
 		}
 	}
 }
