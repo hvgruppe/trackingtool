@@ -29,6 +29,27 @@ class Configurationmodel extends CI_Model {
 		return $query->result_array();
 	}
 	
+	public function fetchIdValues($tblname,$colid,$colname,$val)
+	{
+		$this->db->select('name');
+		$this->db->from($tblname);
+		$this->db->where($colid, $val);
+		
+		// $str = "select name from ". $tblname ." where ".$colid."='".$val."'";
+	
+		// $query = $this->db->query($str);
+		
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0)
+		{
+		   $row = $query->row();
+
+		   return $row->name;
+		} 
+		return "Nil";
+	}
+	
 }
 
 /* End of file Logindetailsmodel.php */

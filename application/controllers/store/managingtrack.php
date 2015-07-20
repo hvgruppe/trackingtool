@@ -25,6 +25,8 @@ class Managingtrack extends CI_Controller {
         $crud->set_subject('Sales Tracking');
         $crud->required_fields('NAME');
         $crud->columns('ordertrackingid','orderid','name','orderdate');
+		// $crud->columns('fullfillment','orderdate','orderid','returnid','itemrece','caseid','product','status');
+		
 		//$crud->fields('ordertrackingid','orderid','name','orderdate');
 		$crud->callback_column('ordertrackingid',array($this,'_callback_webpage_url'));
 		$crud->callback_column('orderdate',array($this,'_callback_dateformat'));

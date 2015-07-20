@@ -94,7 +94,8 @@ class Addtracking extends CI_Controller {
 			//echo $id;
 			// echo site_url('admin/managingtrack');
 			
-			redirect('store/managingtrack');
+			// redirect('store/managingtrack');
+			redirect('store/homepage');
 		}
 	}
 	

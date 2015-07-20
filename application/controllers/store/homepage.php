@@ -19,14 +19,22 @@ class Homepage extends CI_Controller {
         $crud->set_table('ips_ordertracking');
         $crud->set_subject('Sales Tracking');
         $crud->required_fields('NAME');
-        $crud->columns('ordertrackingid','orderid','name','orderdate','Action');
+        // $crud->columns('ordertrackingid','orderid','name','orderdate','Action');
 		//$crud->fields('ordertrackingid','orderid','name','orderdate');
+		$crud->columns('ordertrackingid','fullfillment','orderdate','orderid','returnid','itemrece','caseid','product','status','Action');
+		
+		$crud->display_as('orderdate','Order Date')->display_as('orderid','Order ID')->display_as('returnid','Sales Return ID')->display_as('itemrece','Item Received')->display_as('caseid','Case ID')->display_as('product','Product Condition')->display_as('ordertrackingid','ID');
+		
 		$crud->callback_column('ordertrackingid',array($this,'_callback_webpage_url'));
 		$crud->callback_column('orderdate',array($this,'_callback_dateformat'));
 		
+		$crud->callback_column('fullfillment',array($this,'_callback_fullfillment'));
+		$crud->callback_column('product',array($this,'_callback_product'));
+		$crud->callback_column('status',array($this,'_callback_status'));
+		$crud->callback_column('itemrece',array($this,'_callback_itemrece'));
+		
 		$crud->callback_column('Action',array($this,'_callback_viewpage_url'));
-		// $crud->fields('NAME');
-		// $crud->unset_add();
+		
 		$crud->unset_edit();
 		$crud->unset_read();
 		$crud->unset_delete();
@@ -48,6 +56,35 @@ class Homepage extends CI_Controller {
         // $output = $this->grocery_crud->render();
 		$this->_example_output($output);
 	} 		
+	
+	public function _callback_itemrece($value, $row)
+	{
+		if($value == 'n')
+			return "No";
+		else
+			return 'Yes';
+	}
+	
+	public function _callback_fullfillment($value, $row)
+	{
+		$this->load->model('configurationmodel');
+		$name = $this->configurationmodel->fetchIdValues('ips_fullfillment', 'FID', 'NAME' ,$value);
+		return $name;
+	}
+	
+	public function _callback_status($value, $row)
+	{
+		$this->load->model('configurationmodel');
+		$name = $this->configurationmodel->fetchIdValues('ips_status', 'SID', 'NAME' ,$value);
+		return $name;
+	}
+	
+	public function _callback_product($value, $row)
+	{
+		$this->load->model('configurationmodel');
+		$name = $this->configurationmodel->fetchIdValues('ips_productcondition', 'PCID', 'NAME' ,$value);
+		return $name;
+	}
 	
 	public function _callback_dateformat($value, $row)
 	{

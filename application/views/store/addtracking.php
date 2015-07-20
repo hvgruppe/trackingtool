@@ -56,7 +56,7 @@
                     <span class="icon-bar"></span>
                 </button>
 				<a class="navbar-brand" href=<?php echo site_url('store/homepage');?>>
-					<img src="<?php echo base_url();?>img/iplanet.jpg" alt="iPlanet" />
+					<img src="<?php echo base_url();?>img/gizmoland.png" alt="gizmoland" />
 				</a>
             </div>
             <!-- /.navbar-header -->
@@ -259,14 +259,14 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
+                            <!--<div class="input-group custom-search-form">
                                 <input type="text" class="form-control" placeholder="Search...">
                                 <span class="input-group-btn">
                                 <button class="btn btn-default" type="button">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </span>
-                            </div>
+                            </div>-->
                             <!-- /input-group -->
                         </li>
                         <li>
@@ -282,7 +282,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Sales Return</h1>
+                    <h1 class="page-header">Sale Returns</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -292,7 +292,7 @@
 					<form name="frmtracking" action="addtracking/inserttracking" method="post" enctype="multipart/form-data" onSubmit="return validateFormFields()">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Sales Return
+                            Sale Returns
                         </div>
                         <div class="panel-body">
                             <div id="rootwizard">
@@ -357,7 +357,7 @@
 
 														<div class="span3">
 															<div id="divsrnno" class="form-group">
-																<label>SRN No (Manual Apex/SAP)</label>
+																<label>SRN No (Apex/SAP)</label>
 																<input class="form-control" type="text" id="srnno" name="srnno" placeholder="SRN No"/>
 															</div>
 															
@@ -404,8 +404,8 @@
 													<div class="row-fluid">
 														<div class="span3">
 															<div id="divreturn_initiate_date" class="form-group">
-																<label>Return Initiate Date</label>
-																<input class="form-control" type="text" id="return_initiate_date" name="return_initiate_date" placeholder="Return Initiate Date"/>
+																<label>Return Initiated Date</label>
+																<input class="form-control" type="text" id="return_initiate_date" name="return_initiate_date" placeholder="Return Initiated Date"/>
 															</div>
 														</div>
 														<div class="span3">
@@ -416,7 +416,7 @@
 														</div>
 														<div class="span3">
 															<div id="divreturnid" class="form-group">
-																<label>Sales Return Id</label>
+																<label>Sales Return ID</label>
 																<input  class="form-control" type="text" id="returnid" name="returnid" placeholder="Return Id"/>
 															</div>
 														</div>
@@ -687,7 +687,7 @@
 														
 														<div class="span4">
 															<div id="divcase" class="form-group">
-																<label>Case Id</label>
+																<label>Case ID</label>
 																<input class="form-control" type="text" id="casedetails" name="casedetails" placeholder="Case Details"/>
 															</div>
 														</div>
@@ -871,6 +871,7 @@
 		var returnid = $("#returnid").val();
 		var remarks = $("#remarks").val();
 		var partno = $("#partno").val();
+		var itemrece = $("#itemrece").val();
 		
 		var num_of_item = $("#number_of_entries").val();
 		
@@ -1016,18 +1017,21 @@
 		
 		if(return_initiate_date == '')
 		{
-			errorstr += "<div class='alert alert-danger'>Please enter return initiate date!</div><BR/>";
+			errorstr += "<div class='alert alert-danger'>Please enter return initiated date!</div><BR/>";
 			$('#divreturn_initiate_date').addClass('has-error');
 			valid = false;
 		}
-		/*		
-		if(return_rece_date == '')
-		{
-			errorstr += "<div class='alert alert-danger'>Please enter return received date!</div><BR/>";
-			$('#divreturn_rece_date').addClass('has-error');
-			valid = false;
-		}*/
 		
+		if(itemrece == 'y')
+		{		
+			if(return_rece_date == '')
+			{
+				errorstr += "<div class='alert alert-danger'>Please enter return received date!</div><BR/>";
+				$('#divreturn_rece_date').addClass('has-error');
+				valid = false;
+			}
+		}
+	
 		if(returnid=='')
 		{
 			errorstr += "<div class='alert alert-danger'>Please enter Sale return Id!</div><BR/>";

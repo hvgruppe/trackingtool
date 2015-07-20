@@ -51,7 +51,7 @@
                     <span class="icon-bar"></span>
                 </button>
 				<a class="navbar-brand" href=<?php echo site_url('store/homepage');?>>
-					<img src="<?php echo base_url();?>img/iplanet.jpg" alt="iPlanet" />
+					<img src="<?php echo base_url();?>img/gizmoland.png" alt="gizmoland" />
 				</a>
             </div>
             <!-- /.navbar-header -->
@@ -74,14 +74,14 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
+                            <!--<div class="input-group custom-search-form">
                                 <input type="text" class="form-control" placeholder="Search...">
                                 <span class="input-group-btn">
                                 <button class="btn btn-default" type="button">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </span>
-                            </div>
+                            </div>-->
                             <!-- /input-group -->
                         </li>
                         <li>
