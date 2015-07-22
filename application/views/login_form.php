@@ -46,7 +46,7 @@
 				<form name="login" action="login/validate_credentials" method="post">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading"  align="center">
-                        <img src="<?php echo base_url();?>img/iplanet.jpg" alt="iPlanet" />
+                        <img src="<?php echo base_url();?>img/gizmoland.png" alt="gizmoland" />
                     </div>
                     <div class="panel-body">
                         <form role="form" name="login" action="login/validate_credentials" method="post">
