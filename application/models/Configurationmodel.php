@@ -52,5 +52,5 @@ class Configurationmodel extends CI_Model {
 	
 }
 
-/* End of file Logindetailsmodel.php */
+/* End of file Configurationmodelmodel.php */
 /* Location: ./application/models/Logindetailsmodel.php */
