@@ -43,7 +43,6 @@
 </head>
 
 <body>
-	
     <div id="wrapper">
 		
 		<!-- Navigation -->
@@ -357,7 +356,7 @@
 
 														<div class="span3">
 															<div id="divsrnno" class="form-group">
-																<label>SRN No (Apex/SAP)</label>
+																<label>SRN No (APX/SAP)</label>
 																<input class="form-control" type="text" id="srnno" name="srnno" placeholder="SRN No"/>
 															</div>
 															
@@ -471,14 +470,14 @@
 															</tr>
 															<tr class="span1">
 																<td>
-																	<label>Cost</label>
+																	<label>Cost&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
 																	<input class="form-control" type="hidden" id="qty0" name="qty0" value="1" onChange="calculateTotalAmount(id,value)"  onBlur="calculateTotalAmount(id,value)" placeholder="Qty"/>
 																	<input class="form-control" type="text" id="cost0" name="cost0" placeholder="Cost" onChange="calculateTotalAmount(id,value)"  onBlur="calculateTotalAmount(id,value)" value="0"/>
 																</td>
 															</tr>
 															<tr class="span1">
 																<td>
-																	<label>MRP</label>
+																	<label>MRP&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
 																	<input  class="form-control" type="text" id="mrp0" name="mrp0" onChange="calculateTotalAmount(id,value)"  onBlur="calculateTotalAmount(id,value)" placeholder="Invoice Value" value="0"/>
 																</td>
 															</tr>
@@ -785,7 +784,7 @@
 		$("#orderdate").datepicker({
 			dateFormat:"dd-mm-yy",
 			yearRange: '1920:2020',
-			minDate: new Date(),
+			minDate: "01-01-1920",
 			maxDate: "01-01-2020",
 			changeMonth: true,
 			changeYear: true
@@ -794,7 +793,7 @@
 		$("#invoice_date").datepicker({
 			dateFormat:"dd-mm-yy",
 			yearRange: '1920:2020',
-			minDate: new Date(),
+			minDate: "01-01-1920",
 			maxDate: "01-01-2020",
 			changeMonth: true,
 			changeYear: true
@@ -803,7 +802,7 @@
 		$("#return_initiate_date").datepicker({
 			dateFormat:"dd-mm-yy",
 			yearRange: '1920:2020',
-			minDate: new Date(),
+			minDate: "01-01-1920",
 			maxDate: "01-01-2020",
 			changeMonth: true,
 			changeYear: true
@@ -812,7 +811,7 @@
 		$("#return_rece_date").datepicker({
 			dateFormat:"dd-mm-yy",
 			yearRange: '1920:2020',
-			minDate: new Date(),
+			minDate: "01-01-1920",
 			maxDate: "01-01-2020",
 			changeMonth: true,
 			changeYear: true
@@ -821,7 +820,7 @@
 		$("#casedate").datepicker({
 			dateFormat:"dd-mm-yy",
 			yearRange: '1920:2020',
-			minDate: new Date(),
+			minDate: "01-01-1920",
 			maxDate: "01-01-2020",
 			changeMonth: true,
 			changeYear: true
@@ -1001,12 +1000,7 @@
 			valid = false;
 		}
 		
-		if(srnno == '')
-		{
-			errorstr += "<div class='alert alert-danger'>Please select SRN Number!</div><BR/>";
-			$('#divsrnno').addClass('has-error');
-			valid = false;
-		}
+		
 		
 		if(invoice_date == '')
 		{
@@ -1023,7 +1017,14 @@
 		}
 		
 		if(itemrece == 'y')
-		{		
+		{	
+			if(srnno == '')
+			{
+				errorstr += "<div class='alert alert-danger'>Please select SRN Number!</div><BR/>";
+				$('#divsrnno').addClass('has-error');
+				valid = false;
+			}
+			
 			if(return_rece_date == '')
 			{
 				errorstr += "<div class='alert alert-danger'>Please enter return received date!</div><BR/>";
@@ -1055,13 +1056,13 @@
 			valid = false;
 		}*/
 		
-		
+		/*
 		if(return_awb_no == '')
 		{
 			errorstr += "<div class='alert alert-danger'>Please enter AWB Number!</div><BR/>";
 			$('#divreturn_awb_no').addClass('has-error');
 			valid = false;
-		}
+		}*/
 		
 		if(disposition == '')
 		{

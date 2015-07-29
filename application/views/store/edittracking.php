@@ -438,7 +438,7 @@
 														</div>
 														<div class="span3">
 															<div id="divsrnno" class="form-group">
-																<label>SRN No (Apex/SAP)</label>
+																<label>SRN No (APX/SAP)</label>
 																<input class="form-control" type="text" id="srnno" name="srnno" value="<?php echo $srnno; ?>" placeholder="SRN No"/>
 															</div>
 														</div>
@@ -559,14 +559,14 @@
 															</tr>
 															<tr class="span1">
 																<td>
-																	<label>Cost</label>
+																	<label>Cost&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
 																	<input class="form-control" type="hidden" id="qty<?php echo $k; ?>" name="qty<?php echo $k; ?>" onChange="calculateTotalAmount(id,value)"  onBlur="calculateTotalAmount(id,value)"   value="<?php echo $itemrow['qty']?>" placeholder="Qty"/>
 																	<input class="form-control" type="text" id="cost<?php echo $k; ?>" name="cost<?php echo $k; ?>" placeholder="Cost" onChange="calculateTotalAmount(id,value)"  onBlur="calculateTotalAmount(id,value)"   value="<?php echo number_format($itemrow['cost'], 2, '.', ''); ?>"/>
 																</td>
 															</tr>
 															<tr class="span1">
 																<td>
-																	<label>MRP</label>
+																	<label>MRP&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
 																	<input  class="form-control" type="text" id="mrp<?php echo $k; ?>" name="mrp<?php echo $k; ?>" onChange="calculateTotalAmount(id,value)"  onBlur="calculateTotalAmount(id,value)" placeholder="Invoice Value"   value="<?php echo number_format($itemrow['mrp'], 2, '.', ''); ?>"/>
 																</td>
 															</tr>
@@ -935,7 +935,7 @@
 		$("#orderdate").datepicker({
 			dateFormat:"dd-mm-yy",
 			yearRange: '1920:2020',
-			minDate: new Date(),
+			minDate: "01-01-1920",
 			maxDate: "01-01-2020",
 			changeMonth: true,
 			changeYear: true
@@ -944,7 +944,7 @@
 		$("#return_initiate_date").datepicker({
 			dateFormat:"dd-mm-yy",
 			yearRange: '1920:2020',
-			minDate: new Date(),
+			minDate: "01-01-1920",
 			maxDate: "01-01-2020",
 			changeMonth: true,
 			changeYear: true
@@ -953,7 +953,7 @@
 		$("#return_rece_date").datepicker({
 			dateFormat:"dd-mm-yy",
 			yearRange: '1920:2020',
-			minDate: new Date(),
+			minDate: "01-01-1920",
 			maxDate: "01-01-2020",
 			changeMonth: true,
 			changeYear: true
@@ -962,7 +962,7 @@
 		$("#casedate").datepicker({
 			dateFormat:"dd-mm-yy",
 			yearRange: '1920:2020',
-			minDate: new Date(),
+			minDate: "01-01-1920",
 			maxDate: "01-01-2020",
 			changeMonth: true,
 			changeYear: true
@@ -1049,12 +1049,7 @@
 			valid = false;
 		}
 		
-		if(srnno == '')
-		{
-			errorstr += "<div class='alert alert-danger'>Please select SRN Number!</div><BR/>";
-			$('#divsrnno').addClass('has-error');
-			valid = false;
-		}
+		
 		/*
 		if(return_initiate_date == '')
 		{
@@ -1064,7 +1059,14 @@
 		}*/
 			
 		if(itemrece == 'y')
-		{		
+		{	
+			if(srnno == '')
+			{
+				errorstr += "<div class='alert alert-danger'>Please select SRN Number!</div><BR/>";
+				$('#divsrnno').addClass('has-error');
+				valid = false;
+			}
+		
 			if(return_rece_date == '')
 			{
 				errorstr += "<div class='alert alert-danger'>Please enter return received date!</div><BR/>";
@@ -1134,13 +1136,13 @@
 			$('#divtotal').addClass('has-error');
 			valid = false;
 		}
-		
+		/*
 		if(return_awb_no == '')
 		{
 			errorstr += "<div class='alert alert-danger'>Please enter AWB Number!</div><BR/>";
 			$('#divreturn_awb_no').addClass('has-error');
 			valid = false;
-		}
+		}*/
 		
 		if(disposition == '')
 		{

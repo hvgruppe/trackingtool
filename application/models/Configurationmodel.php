@@ -29,6 +29,7 @@ class Configurationmodel extends CI_Model {
 		return $query->result_array();
 	}
 	
+	
 	public function fetchIdValues($tblname,$colid,$colname,$val)
 	{
 		$this->db->select('name');
@@ -49,8 +50,7 @@ class Configurationmodel extends CI_Model {
 		} 
 		return "Nil";
 	}
-	
 }
 
-/* End of file Configurationmodelmodel.php */
+/* End of file Configurationmodel.php */
 /* Location: ./application/models/Logindetailsmodel.php */
