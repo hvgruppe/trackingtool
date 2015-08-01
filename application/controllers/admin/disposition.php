@@ -28,7 +28,7 @@ class Disposition extends CI_Controller {
 		$crud->fields('NAME');
 		// $crud->unset_add();
 		// $crud->unset_edit();
-		// $crud->unset_delete();
+		$crud->unset_delete();
 		$crud->set_lang_string('insert_success_message',
 			'Your data has been successfully stored into the database.<br/>Please wait while you are redirecting to the list page.
 			<script type="text/javascript">

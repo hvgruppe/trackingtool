@@ -144,7 +144,7 @@ class Managingtrack extends CI_Controller {
 			
 			$data['hashordertrackingid'] = $this->input->post('hashordertrackingid'); //$this->session->user
 			
-			$casedata['caseid'] = $this->input->post('caseid');
+			$casedata['caseid'] = $this->input->post('casedetails');
 			
 			$casedata['casenotes'] = $this->input->post('notes');
 			
@@ -152,8 +152,63 @@ class Managingtrack extends CI_Controller {
 			$id = $this->trackingmodel->update_tracking($data,$casedata);
 			// echo $id;
 
-			redirect('store/managingtrack');
+			redirect('store/homepage');
 		}
+	}
+	
+	public function addnotes()
+	{
+		$str = '';
+		if($this->input->post('casenotes'))
+		{
+			$casedata = array();
+			$casedata['caseid'] = $this->input->post('caseid');
+			if(strlen($this->input->post('casedate'))>4)
+				$data['casedate'] = strtotime($this->input->post('casedate'));
+			else
+				$data['casedate'] = $this->input->post('casedate');
+			$casedata['casenotes'] = $this->input->post('casenotes');
+			
+			$orderid = $this->input->post('hashorderid');
+			$this->load->model('trackingmodel');
+			$casedetails = $this->trackingmodel->update_notes($orderid,$casedata);
+			
+			$str = '<table class="table">
+				<thead>
+					<tr>
+						<th>#</th>
+						
+						<th>Notes</th>
+					</tr>
+				</thead>
+				<tbody>';
+				
+				$clsrow = array(
+					0=>"success",
+					1=>"info",
+					2=>"warning",
+					3=>"danger"
+				);
+				$j = 1;
+				$i = 0;
+				foreach($casedetails as $caserow)
+				{
+					if($i == 4)
+						$i = 0;
+					$str .= "<tr class='".$clsrow[$i]."'>";
+					$str .= "<td>".$j."</td>";
+					$str .= "<td>".$caserow['casenotes']."</td>";
+					$str .= "</tr>";					
+					$j++;
+					$i++;
+				}
+				$str .= '</tbody></table>';
+				echo $str;
+		}
+		else{
+			echo "Case Note is empty!";
+		}
+		
 	}
 }
 

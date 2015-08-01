@@ -23,12 +23,12 @@ class Fullfillment extends CI_Controller {
         $crud->set_theme('datatables');
         $crud->set_table('ips_fullfillment');
         $crud->set_subject('Fullfillment');
-        $crud->required_fields('NAME');
-        $crud->columns('NAME','DISABLE');
-		$crud->fields('NAME');
+        $crud->required_fields('NAME','SRN_Available','DISABLE');
+        $crud->columns('NAME','SRN_Available','DISABLE');
+		$crud->fields('NAME','SRN_Available','DISABLE');
 		// $crud->unset_add();
 		// $crud->unset_edit();
-		// $crud->unset_delete();
+		$crud->unset_delete();
 		
 		$crud->callback_after_insert(array($this, 'fullfillmentid_generation'));
 		

@@ -97,6 +97,19 @@ class Addtracking extends CI_Controller {
 		}
 	}
 	
+	public function checkMandatory()
+	{
+		if($this->input->post('fullfillment'))
+		{
+			$fullfillment = $this->input->post('fullfillment');
+			$this->load->model('configurationmodel');
+			$val = $this->configurationmodel->fetchSRNAvailable($fullfillment);
+			if($val == 'Y')
+				echo 'yes';
+			else
+				echo 'no';
+		}
+	}
 }
 
 /* End of file addtracking.php */

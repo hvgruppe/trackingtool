@@ -312,7 +312,7 @@
 														<div class="span3">
 															<div id="divfullfillment" class="form-group">
 																<label>Fullfillment</label>
-																<select class="form-control" id="fullfillment" name="fullfillment">
+																<select class="form-control" id="fullfillment" name="fullfillment" onChange="check_srn_available()">
 																<option value="">Select Fullfillment</option>
 																<?php
 																	foreach($fullfillmentdetails as $row)
@@ -575,7 +575,9 @@
 														<div class="span3">
 															<div id="divproduct" class="form-group">
 																<label>Product Condition</label>
-																<select class="form-control" id="product" name="product" >
+																<input class="form-control" type="text" id="product" name="product" placeholder="Product Condition"/>
+																
+																<!--<select class="form-control" id="product" name="product" >
 																	<option value="">Select Product Condition</option>
 																	<?php
 																		foreach($procondtiondetails as $row)
@@ -583,7 +585,7 @@
 																			echo "<option value='".$row['PCID']."'>". $row['NAME'] ."</option>";
 																		}
 																	?>
-																</select>
+																</select>-->
 															</div>
 															<!--<div id="divincidentid" class="form-group">
 																<label>Incident ID</label>
@@ -710,7 +712,6 @@
 															
 															</div>
 														</div>
-														
 													</div>
 												</div>
 											</div>
@@ -1018,12 +1019,20 @@
 		
 		if(itemrece == 'y')
 		{	
-			if(srnno == '')
+			if($('#srnno').attr('mandatory') == 'yes')
 			{
-				errorstr += "<div class='alert alert-danger'>Please select SRN Number!</div><BR/>";
-				$('#divsrnno').addClass('has-error');
-				valid = false;
+				if(srnno == '')
+				{
+					errorstr += "<div class='alert alert-danger'>Please select SRN Number!</div><BR/>";
+					$('#divsrnno').addClass('has-error');
+					valid = false;
+				}
 			}
+			else
+			{
+				$('#divsrnno').removeClass('has-error');
+			}
+			
 			
 			if(return_rece_date == '')
 			{
@@ -1031,6 +1040,10 @@
 				$('#divreturn_rece_date').addClass('has-error');
 				valid = false;
 			}
+		}
+		else
+		{
+			$('#divsrnno').removeClass('has-error');
 		}
 	
 		if(returnid=='')
@@ -1374,6 +1387,22 @@
 				$(".modal-body").html("<div class='alert alert-warning'>Item Received is no! <BR/> Kindly verify it!</div>");
 				$('#myModal').modal('toggle');
 			}
+		}
+	}
+	
+	function check_srn_available(){
+		var fullfillment = $("#fullfillment").val();
+		if(fullfillment !="")
+		{
+			$.ajax({
+				url:"addtracking/checkMandatory",
+				type:"POST",
+				data:{"fullfillment":fullfillment},
+				success:function(msg){
+					
+					$("#srnno").attr("mandatory",msg);
+				}
+			});
 		}
 	}
 	</script>

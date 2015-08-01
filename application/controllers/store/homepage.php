@@ -29,7 +29,7 @@ class Homepage extends CI_Controller {
 		$crud->callback_column('orderdate',array($this,'_callback_dateformat'));
 		
 		$crud->callback_column('fullfillment',array($this,'_callback_fullfillment'));
-		$crud->callback_column('product',array($this,'_callback_product'));
+		// $crud->callback_column('product',array($this,'_callback_product'));
 		$crud->callback_column('status',array($this,'_callback_status'));
 		$crud->callback_column('itemrece',array($this,'_callback_itemrece'));
 		

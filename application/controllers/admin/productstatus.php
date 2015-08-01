@@ -25,10 +25,10 @@ class Productstatus extends CI_Controller {
         $crud->set_subject('Product Status');
         $crud->required_fields('NAME');
         $crud->columns('NAME','DISABLE');
-		$crud->fields('NAME');
+		$crud->fields('NAME','DISABLE');
 		// $crud->unset_add();
 		// $crud->unset_edit();
-		// $crud->unset_delete();
+		$crud->unset_delete();
 		
 		$crud->callback_after_insert(array($this, 'productstatus_generation'));
 		

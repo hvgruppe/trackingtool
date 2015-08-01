@@ -50,6 +50,27 @@ class Configurationmodel extends CI_Model {
 		} 
 		return "Nil";
 	}
+	
+	public function fetchSRNAvailable($fid)
+	{
+		$this->db->select('SRN_Available');
+		$this->db->from('ips_fullfillment');
+		$this->db->where('FID', $fid);
+		
+		// $str = "select name from ". $tblname ." where ".$colid."='".$val."'";
+	
+		// $query = $this->db->query($str);
+		
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0)
+		{
+		   $row = $query->row();
+
+		   return $row->SRN_Available;
+		} 
+		return "No";
+	}
 }
 
 /* End of file Configurationmodel.php */

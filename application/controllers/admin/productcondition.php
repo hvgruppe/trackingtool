@@ -28,7 +28,7 @@ class Productcondition extends CI_Controller {
 		$crud->fields('NAME');
 		// $crud->unset_add();
 		// $crud->unset_edit();
-		// $crud->unset_delete();
+		$crud->unset_delete();
 		
 		$crud->callback_after_insert(array($this, 'productcondition_generation'));
 		

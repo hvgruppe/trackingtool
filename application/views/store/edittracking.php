@@ -362,7 +362,7 @@
             <!-- /.row -->
             <div class="row">
 				<div class="col-lg-12 col-md-6">
-					<form name="frmtracking" action="updatetracking" method="post" onSubmit="return validateFormFields()">
+					<form name="frmtracking" action="updatetracking" method="post" enctype="multipart/form-data" onSubmit="return validateFormFields()">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             Sale Returns
@@ -386,7 +386,7 @@
 														<div class="span3">
 															<div id="divfullfillment" class="form-group">
 																<label>Fullfillment</label>
-																<select class="form-control" id="fullfillment" name="fullfillment">
+																<select class="form-control" id="fullfillment" name="fullfillment"  onChange="check_srn_available()">
 																<option value="">Select Fullfillment</option>
 																<?php
 																	foreach($fullfillmentdetails as $row)
@@ -673,7 +673,8 @@
 														<div class="span3">
 															<div id="divproduct" class="form-group">
 																<label>Product Condition</label>
-																<select class="form-control" id="product" name="product" >
+																<input class="form-control" type="text" id="product" name="product" placeholder="Product Condition" value="<?php echo $product; ?>"/>
+																<!--<select class="form-control" id="product" name="product" >
 																	<option value="">Select Product Condition</option>
 																	<?php
 																		foreach($procondtiondetails as $row)
@@ -684,11 +685,59 @@
 																				echo "<option value='".$row['PCID']."'>". $row['NAME'] ."</option>";
 																		}
 																	?>
-																</select>
+																</select>-->
 															</div>
 														</div>
 														
 													</div>
+													
+													<div class="row-fluid">
+														<div class="span3">
+															<div class="form-group">
+																<label>Product Image </label>	
+															</div>
+														</div>
+														<div class="span3">
+															<div class="form-group">
+																<button class="btn btn-success" type="button" name="addattach" id="addattach"><i class="fa fa-plus-circle fa-fw"></i>Attach another file</button>
+															</div>
+														</div>
+														<div class="span3">
+															<div class="form-group">
+																<input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
+															</div>
+														</div>
+														<div class="span3">
+															<div class="form-group">
+																<input type="hidden" id="number_of_img" name="number_of_img" value="1"/>
+															</div>
+														</div>
+													</div>
+													
+													<div class="row-fluid">
+														<div class="span12">
+															<div class="form-group">
+					 
+		<table id="uploadtable">
+			<tbody class="line_item" id="row0">
+				<tr>
+					<td>
+						<a href="#"	class="trash_link" id="trash_link0"	rel="0"	title="The first row cannot be deleted"	>
+								<!--<img id="trash_image0" src="blank.gif" height="16px" width="16px" title="The first row cannot be deleted"alt="Delete"
+								 />-->
+								 <i class="fa fa-trash-o fa-fw"></i>
+							</a>
+        				</td>
+					<td ><input type="file" name="uploadfile0" id="uploadfile0" value="" /></td>
+				</tr>
+			</tbody>
+		</table>
+		
+															</div>
+														</div>
+														
+													</div>
+													
 													<div class="row-fluid">
 														<div class="span12">
 															<div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -785,13 +834,23 @@
 														<div class="span4">
 															<div id="divcase" class="form-group">
 																<label>Case ID</label>
-																<input class="form-control" type="text" id="casedetails" name="casedetails"  value="<?php if(strlen($caseid)>1) {echo $caseid; } ?>" <?php if(strlen($caseid)>1) { echo 'disabled'; } ?> placeholder="Case Details"/>
+																<?php if(strlen($caseid)>1) { ?>
+																<input class="form-control" type="text" id="casedetails_1" name="casedetails_1"  value="<?php if(strlen($caseid)>1) {echo $caseid; } ?>" <?php if(strlen($caseid)>1) { echo 'disabled'; } ?> placeholder="Case Details"/>
+																<input type="hidden" id="casedetails" name="casedetails" value="<?php echo $caseid; ?>"/>
+																<?php } else {?>
+																<input class="form-control" type="text" id="casedetails" name="casedetails"  value="<?php if(strlen($caseid)>1) {echo $caseid; } ?>"  placeholder="Case Details"/>
+																<?php } ?>
 															</div>
 														</div>
 														<div class="span4">
 															<div class="form-group">
 																<label>Case Ticket Logged Date</label>
-																<input class="form-control" type="text" id="casedate" name="casedate" value="<?php if(strlen($casedate)>4){echo date('d-m-Y',$casedate);} ?>"  <?php if(strlen($casedate)>4){echo 'disabled';} ?> placeholder="Case Date"/>
+																<?php if(strlen($casedate)>4){ ?>
+																<input class="form-control" type="text" id="casedate_1" name="casedate_1" value="<?php if(strlen($casedate)>4){echo date('d-m-Y',$casedate);} ?>"  <?php if(strlen($casedate)>4){echo 'disabled';} ?> placeholder="Case Date"/>
+																<input type="hidden" id="casedate" name="casedate" value="<?php echo date('d-m-Y',$casedate); ?>"/>
+																<?php } else {?>
+																<input class="form-control" type="text" id="casedate" name="casedate" value="<?php if(strlen($casedate)>4){echo date('d-m-Y',$casedate);} ?>"  placeholder="Case Date"/>
+																<?php } ?>
 															</div>
 														</div>
 														<div class="span4">
@@ -813,7 +872,11 @@
 															</div>
 														</div>
 													</div>
-													
+													<div class="row-fluid">
+														<div class="span1">
+															<button id="addnote" name="addnote" class="btn btn-outline btn-success" type="button"><i class="fa fa-plus"></i>Add Note</button>
+														</div>
+													</div>
 												</div>
 											</div>
 											
@@ -825,7 +888,7 @@
 																</div>
 																<!-- /.panel-heading -->
 																<div class="panel-body">
-																	<div class="table-responsive">
+																	<div id="divcasenote" class="table-responsive">
 																		<table class="table">
 																			<thead>
 																				<tr>
@@ -890,7 +953,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                            <h4 class="modal-title" id="myModalLabel">Information</h4>
                                         </div>
                                         <div class="modal-body">
                                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -967,7 +1030,36 @@
 			changeMonth: true,
 			changeYear: true
 		});
+		
+		$("#additem").click(function(){
+			add_pro_item();
+		});
+		
+		$("a.add_line_item").click(function () {
+			add_line_item();
+			//autoFill($(".note"), "Description");
+		});
+		
 	});	
+	
+	
+	$(document).on("click", "[class*='trash_link']", function() {
+		// alert("Hi");
+		id = $(this).attr("rel");
+		
+		if (id == 0 )
+			return;
+		else 
+		{
+			delete_row(id);
+		}
+	});
+	
+	function delete_row(row_number)
+	{
+	//	$('#row'+row_number).hide();
+		$('#row'+row_number).remove();
+	}
 	
 	
 	function validateFormFields(){
@@ -1060,11 +1152,18 @@
 			
 		if(itemrece == 'y')
 		{	
-			if(srnno == '')
+			if($('#srnno').attr('mandatory') == 'yes')
 			{
-				errorstr += "<div class='alert alert-danger'>Please select SRN Number!</div><BR/>";
-				$('#divsrnno').addClass('has-error');
-				valid = false;
+				if(srnno == '')
+				{
+					errorstr += "<div class='alert alert-danger'>Please select SRN Number!</div><BR/>";
+					$('#divsrnno').addClass('has-error');
+					valid = false;
+				}
+			}
+			else
+			{
+				$('#divsrnno').removeClass('has-error');
 			}
 		
 			if(return_rece_date == '')
@@ -1073,6 +1172,10 @@
 				$('#divreturn_rece_date').addClass('has-error');
 				valid = false;
 			}
+		}
+		else
+		{
+			$('#divsrnno').removeClass('has-error');
 		}
 		/*if(return_rece_date == '')
 		{
@@ -1288,6 +1391,67 @@
 		
 	}
 	
+	jQuery('#addattach').click(function () {
+		/*
+		var table = document.getElementById('uploadtable');
+	    var rowCount = jQuery('#uploadtable tr').length;
+		rowCount = rowCount+1;
+	    var fileid = "uploadfile"+rowCount;
+		jQuery('#uploadtable tr:last').after('<tr><td><input type="file" name="'+fileid+'" id="'+fileid+'"></td></tr>');*/
+		addattach();
+	});
+	
+	function addattach()
+	{
+		$('#gmail_loading').show();
+		
+		//clone the last tr in the item table
+		var clonedRow = $('#uploadtable tbody.line_item:first').clone();
+		var lastRow = $('#uploadtable tbody.line_item:last').clone();
+		
+		//find the Id for the rowfrom the quantity if
+
+		var rowID_old = $("input[id^='uploadfile']",clonedRow).attr("id");
+		var rowID_last = $("input[id^='uploadfile']",lastRow).attr("id");
+
+		rowID_old = parseInt(rowID_old.slice(10)); //using 8 as 'quantity' has eight letters and want to get the number thats after that
+		rowID_last = parseInt(rowID_last.slice(10)); //using 8 as 'quantity' has eight letters and want to get the number thats after that
+		// alert(rowID_last);
+		var rowID_new = rowID_last + 1;
+
+		$("#number_of_img").attr("value",rowID_new);
+
+
+		clonedRow.attr("id","row"+rowID_new);
+
+		//trash image
+
+		clonedRow.find("#trash_link"+rowID_old).attr("id", "trash_link"+rowID_new);
+		clonedRow.find("#trash_link"+rowID_new).attr("name", "trash_link"+rowID_new);
+		clonedRow.find("#trash_link_edit"+rowID_old).attr("id", "trash_link_edit"+rowID_new);
+		clonedRow.find("#trash_link_edit"+rowID_new).attr("name", "trash_link_edit"+rowID_new);
+	
+		clonedRow.find("#trash_link"+rowID_new).attr("href", "#");
+		clonedRow.find("#trash_link"+rowID_new).attr("rel", rowID_new);
+		clonedRow.find("#trash_link_edit"+rowID_new).attr("href", "#");
+		clonedRow.find("#trash_link_edit"+rowID_new).attr("rel", rowID_new);
+
+		clonedRow.find("#line_item"+rowID_old).attr("id", "line_item"+rowID_new);
+		clonedRow.find("#line_item"+rowID_new).attr("name", "line_item"+rowID_new);
+		clonedRow.find("#line_item"+rowID_new).val('');
+
+		$("#uploadfile"+rowID_old, clonedRow).attr("id", "uploadfile"+rowID_new);
+		$("#uploadfile"+rowID_new, clonedRow).attr("name", "uploadfile"+rowID_new);
+		
+		$("#uploadfile"+rowID_new).replaceWith($("#uploadfile"+rowID_new).val('').clone(true));
+		clonedRow.find("#uploadfile"+rowID_new).prop("value","");
+		
+		$('#uploadtable').append(clonedRow);
+		$('#gmail_loading').hide();
+
+
+	}
+	
 	function chkItemReceived()
 	{
 		var ival = $("#itemrece").val();
@@ -1300,6 +1464,53 @@
 				$(".modal-body").html("<div class='alert alert-warning'>Item Received is no! <BR/> Kindly verify it!</div>");
 				$('#myModal').modal('toggle');
 			}
+		}
+	}
+	
+	$("#addnote").click(function (){
+		var casedetails = $("#casedetails").val();
+		var casedate = $("#casedate").val();
+		var notes = $("#notes").val();
+		if(casedetails != "" && casedate != "")
+		{
+			if(notes !="")
+			{
+				$.ajax({
+					url:"addnotes",
+					type:"POST",
+					data:{"casenotes":notes,"caseid":casedetails,"casedate":casedate,"hashorderid":$("#hashordertrackingid").val()},
+					success:function(msg){
+						$("#divcasenote").html(msg);
+						$("#notes").val("");
+					}
+				});
+			}
+			else
+			{
+				$(".modal-body").html("<div class='alert alert-warning'>Notes should not be empty!</div>");
+					$('#myModal').modal('toggle');
+			}
+		}
+		else
+		{
+			$(".modal-body").html("<div class='alert alert-warning'>First add Case ID and Case Date!</div>");
+				$('#myModal').modal('toggle');
+		}
+	});
+	
+	function check_srn_available(){
+		var fullfillment = $("#fullfillment").val();
+		if(fullfillment !="")
+		{
+			$.ajax({
+				url:"addtracking/checkMandatory",
+				type:"POST",
+				data:{"fullfillment":fullfillment},
+				success:function(msg){
+					
+					$("#srnno").attr("mandatory",msg);
+				}
+			});
 		}
 	}
 	</script>

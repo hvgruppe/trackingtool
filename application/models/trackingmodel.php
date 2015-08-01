@@ -141,20 +141,82 @@ class Trackingmodel extends CI_Model {
 		}
 		if($ordertrackingid != "")
 		{
-			if($casedata['casenotes'] != "")
+			/*if($casedata['casenotes'] != "")
 			{
 				$casedata['ordertrackingid'] = $ordertrackingid;
 				$this->db->insert('ips_case', $casedata); 
 				$caseid = $this->db->insert_id();
-			}
+			}*/
 			
 			$this->fetchProductItem($ordertrackingid);
-			/*if($editproductdata){
-				$this->db->insert('ips_productitems_edit', $editproductdata); 
-				
-				$this->db->where('ordertrackingid', $ordertrackingid);
-				$this->db->delete('ips_productitems'); 
-			}*/
+			
+		}
+		
+		if($this->input->post('number_of_img')>0)
+		{
+
+			$lenimg = $this->input->post('number_of_img') + 1;
+			echo $lenimg;
+			for($i=0;$i<$lenimg;$i++)
+			{
+				$file_path = "productimages/";
+				$uploadfile = 'uploadfile'.$i;
+				$chkfilename = $_FILES[$uploadfile]['name'];
+				if($chkfilename != "")
+				{
+					if($_FILES[$uploadfile]['error'] != 0)
+						continue;
+					else
+					{
+						
+						$filename = basename($_FILES[$uploadfile]['name']);
+						
+						$ext = substr($filename, strrpos($filename, '.') + 1);
+						if ((preg_match("/jpeg/i",$ext))||(preg_match("/jpg/i",$ext))||(preg_match("/png/i",$ext))||(preg_match("/gif/i",$ext) ) && ($_FILES[$uploadfile]["size"] < 500000)) 
+						{
+						
+							$fileName = $_FILES[$uploadfile]['name'];
+							$tmpName  = $_FILES[$uploadfile]['tmp_name'];
+							$fileSize = $_FILES[$uploadfile]['size'];
+							$fileType = $_FILES[$uploadfile]['type'];
+							$name = explode('.',$fileName);
+							$file=$name[0];
+							
+							$fp      = fopen($tmpName, 'r');
+							$content = fread($fp, filesize($tmpName));
+							$content = addslashes($content);
+							fclose($fp);
+							if(!get_magic_quotes_gpc())
+							{
+								$fileName = addslashes($fileName);
+							}
+							$fileName = md5($fileName.$file.time());
+							$fileName=	$fileName.".".$ext;
+							
+							if(!is_dir($file_path))
+							{
+								mkdir($file_path,0777);
+							}
+							$file_path = $file_path.$ordertrackingid."/";
+							if(!is_dir($file_path))
+							{
+								mkdir($file_path,0777);
+							}
+							move_uploaded_file($_FILES[$uploadfile]["tmp_name"],$file_path . $fileName);
+							
+							if($fileName != "")
+							{
+								$imgdata['ordertrackingid'] = $ordertrackingid;
+								$imgdata['imgname'] = $fileName;
+								$imgdata['imgtype'] = $fileSize;
+								$imgdata['imgsize'] = $fileType;
+								$this->db->insert('ips_productimg', $imgdata); 
+								$caseid = $this->db->insert_id();	
+							}
+						}
+					}	
+				}
+			}
 		}
 		
 		if($this->input->post('number_of_entries')>=0)
@@ -188,9 +250,7 @@ class Trackingmodel extends CI_Model {
 				
 			}
 		}
-		
-		
-
+	
 		return ($this->db->affected_rows() > 0) ? TRUE : FALSE;
 	}
 	
@@ -339,6 +399,48 @@ class Trackingmodel extends CI_Model {
 			$this->db->where('ordertrackingid', $ordertrackingid);
 			$this->db->delete('ips_productitems'); 
 		}
+	}
+	
+	public function update_notes($hashordertrackingid,$casedata)
+	{
+		$ordertrackingid = '';
+		$query = $this->db->query("select ordertrackingid from ips_ordertracking where hashordertrackingid='".$hashordertrackingid."'");
+		
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row();
+			$ordertrackingid = $row->ordertrackingid;
+		}
+		if($ordertrackingid != "")
+		{
+			if($casedata['casenotes'] != "")
+			{
+				$casedata['ordertrackingid'] = $ordertrackingid;
+				$this->db->insert('ips_case', $casedata); 
+				// $caseid = $this->db->insert_id();
+				// return ($this->db->affected_rows() > 0) ? false : true;
+			}
+		}
+		
+		$this->db->select('*');
+		$this->db->from('ips_case');
+		$this->db->where('ordertrackingid', $ordertrackingid);
+		$casedata = array();
+		$casequery = $this->db->get();
+		
+		if($casequery->num_rows() > 0)
+		{
+			$caseresult = $casequery->result_array();
+			$i = 0;
+			foreach($caseresult as $caserow)
+			{
+				$casedata[$i]['casedetails'] = $caserow['caseid'];
+				$casedata[$i]['casenotes'] = $caserow['casenotes'];
+				$i++;
+			}
+		}
+		return $casedata;
+		
 	}
 }
 
