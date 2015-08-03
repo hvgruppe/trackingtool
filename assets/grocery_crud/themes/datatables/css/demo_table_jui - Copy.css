@@ -195,8 +195,6 @@ table.display tr.heading2 td {
 
 table.display td {
 	padding: 3px 10px;
-	border: 1px solid #cdcdde;
-	background: #fff none repeat scroll 0 0;
 }
 
 table.display td.center {
