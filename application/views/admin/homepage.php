@@ -58,7 +58,7 @@
                     <span class="icon-bar"></span>
                 </button>
 				<a class="navbar-brand" href=<?php echo site_url('admin/homepage');?>>
-					<img src="<?php echo base_url();?>img/iplanet.jpg" alt="iPlanet" />
+					<img src="<?php echo base_url();?>img/gizmoland.png" alt="Gizmoland" />
 				</a>
             </div>
             <!-- /.navbar-header -->
