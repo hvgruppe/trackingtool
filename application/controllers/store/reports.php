@@ -45,6 +45,7 @@ class Reports extends CI_Controller {
 		//name the worksheet
 		$this->excel->getActiveSheet()->setTitle('Sale Returns');
 		$this->excel->getActiveSheet()->getStyle('L3:L1000')->getNumberFormat()->setFormatCode('###0');
+		$this->excel->getActiveSheet()->getStyle('G3:G1000')->getNumberFormat()->setFormatCode('###0');
 		//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
 		//if you want to save it as .XLSX Excel 2007 format
 		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');

@@ -180,7 +180,7 @@ class Reportsmodel extends CI_Model {
 				$data['Product Condition'] = $row['product'];
 				$data['Reason for Return'] = $row['remarks'];
 				$data['Case ID'] = $row['caseid'];
-				$data['Case ID Logged Date'] = $row['casedate'];
+				$data['Case ID Logged Date'] = date('d-m-Y',$row['casedate']);
 				//$data['Status'] = $row['status'];
 				$status = $row['status'];
 				if(isset($this->status_array[$status]))
