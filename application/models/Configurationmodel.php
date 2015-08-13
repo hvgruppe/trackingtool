@@ -15,6 +15,13 @@ class Configurationmodel extends CI_Model {
 		return $query->result_array();
 	}
 	
+	public function fetchBrand()
+	{
+		$str = "select * from ips_brand where disable='N'";
+		$query = $this->db->query($str);
+		return $query->result_array();
+	}
+	
 	public function fetchProductCondition()
 	{
 		$str = "select * from ips_productcondition where disable='N'";

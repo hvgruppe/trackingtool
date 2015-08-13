@@ -19,6 +19,7 @@ class Trackingmodel extends CI_Model {
 			$cntitem = $this->input->post('number_of_entries') + 1;
 			for($i=0;$i<$cntitem;$i++)
 			{
+				$brand = 'brand0';
 				$upc = 'upc'.$i;
 				$description = 'description'.$i;
 				$serial = 'serial'.$i;
@@ -30,6 +31,7 @@ class Trackingmodel extends CI_Model {
 				if($this->input->post($description) != "")
 				{
 					$productdata['ordertrackingid'] = $orderid;
+					$productdata['brand'] = $this->input->post($brand);
 					$productdata['upc'] = $this->input->post($upc);
 					$productdata['description'] = $this->input->post($description);
 					$productdata['serial'] = $this->input->post($serial);
@@ -224,6 +226,7 @@ class Trackingmodel extends CI_Model {
 			$cntitem = $this->input->post('number_of_entries') + 1;
 			for($i=0;$i<$cntitem;$i++)
 			{
+				$brand = 'brand0';
 				$upc = 'upc'.$i;
 				$description = 'description'.$i;
 				$serial = 'serial'.$i;
@@ -235,6 +238,7 @@ class Trackingmodel extends CI_Model {
 				if($this->input->post($description) != "")
 				{
 					$productdata['ordertrackingid'] = $ordertrackingid;
+					$productdata['brand'] = $this->input->post($brand);
 					$productdata['upc'] = $this->input->post($upc);
 					$productdata['description'] = $this->input->post($description);
 					$productdata['serial'] = $this->input->post($serial);
@@ -349,6 +353,8 @@ class Trackingmodel extends CI_Model {
 					$i = 0;
 					foreach($itemresult as $itemrow)
 					{
+						
+						$data['brand'] = $itemrow['brand'];
 						$itemdata[$i]['upc'] = $itemrow['upc'];
 						$itemdata[$i]['serial'] = $itemrow['serial'];
 						$itemdata[$i]['description'] = $itemrow['description'];

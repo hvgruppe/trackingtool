@@ -15,8 +15,9 @@ class Reports extends CI_Controller {
 	{
 		$this->load->model('configurationmodel');
 		$data = array();
-		
+		$data['branddetails'] = $this->configurationmodel->fetchBrand();
 		$data['fullfillmentdetails'] = $this->configurationmodel->fetchFullfillment();
+		$data['dispositiondetails'] = $this->configurationmodel->fetchDisposition();
 		$this->load->view('store/reports',$data); 
 	} 
 
@@ -25,6 +26,23 @@ class Reports extends CI_Controller {
 		$this->load->library('excel');
 		$this->load->model('reportsmodel');
 		$data = array();
+		$postfill = $postbrand = $postdisposition = array();
+		
+		if (!empty($this->input->post('fullfillmentselect'))){
+			// $postfill = implode("--",$this->input->post('fullfillmentselect'));
+			$postfill = $this->input->post('fullfillmentselect');
+		}
+		
+		if (!empty($this->input->post('brandselect'))){
+			// $postbrand = implode(' -- ',$this->input->post('brandselect'));
+			$postbrand = $this->input->post('brandselect');
+		}
+		
+		if (!empty($this->input->post('dispositionselect'))){
+			// $postdisposition = implode(' -- ',$this->input->post('dispositionselect'));
+			$postdisposition = $this->input->post('dispositionselect');
+		}
+		
 		if($this->input->post('fullfillment') == '')
 			$data['fullfillment'] = 'all';
 		else
@@ -34,7 +52,7 @@ class Reports extends CI_Controller {
 		$data['todate'] = $this->input->post('todate');
 		
 		
-		$excelreport = $this->reportsmodel->fetchOrderDetails($data);
+		$excelreport = $this->reportsmodel->fetchOrderDetails($data, $postfill, $postbrand, $postdisposition);
 		
 		// print_r($excelreport);
 		// exit;

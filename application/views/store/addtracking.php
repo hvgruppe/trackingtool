@@ -272,6 +272,32 @@
 													<div class="row-fluid">
 														<button class="btn btn-success" type="button" name="additem" id="additem"><i class="fa fa-plus-circle fa-fw"></i>Add New Item</button>
 													</div>
+													<div class="row-fluid">
+														<div class="span2">
+															<div id="divbrand" class="form-group">
+																<label>Brand</label>
+																<select class="form-control" id="brand0" name="brand0">
+																<option value="">Select Brand</option>
+																<?php
+																	foreach($branddetails as $row)
+																	{
+																		echo "<option value='".$row['BID']."'>". $row['NAME'] ."</option>";
+																	}
+																?>
+																</select>
+															</div>
+														</div>
+														<div class="span3">
+															
+														</div>
+
+														<div class="span3">
+															
+														</div>
+														<div class="span3">
+															
+														</div>
+													</div>
 																									
 													<table id="clonediv" class="row-fluid">
 														<tbody class="rowdiv" id="prorow0">
@@ -710,6 +736,7 @@
 		{
 			for(i=0;i<=num_of_item;i++)
 			{
+				brand = $("#brand"+i).val();
 				upc = $("#upc"+i).val();
 				description = $("#description"+i).val();
 				category = $("#category"+i).val();
@@ -718,6 +745,20 @@
 				mrp = $("#mrp"+i).val();
 				total = $("#total"+i).val();
 				reimbursed = $("#reimbursed"+i).val();
+				
+				if(brand == '')
+				{
+					errorstr += "<div class='alert alert-danger'>Please enter Brand! on row"+(i+1)+"</div><BR/>";
+					$("#brand"+i).addClass('clsalerttext');
+					valid = false;
+				}
+				
+				if(upc == '')
+				{
+					errorstr += "<div class='alert alert-danger'>Please enter UPC! on row"+(i+1)+"</div><BR/>";
+					$("#upc"+i).addClass('clsalerttext');
+					valid = false;
+				}
 				
 				if(upc == '')
 				{

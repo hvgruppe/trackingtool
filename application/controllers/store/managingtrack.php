@@ -93,6 +93,7 @@ class Managingtrack extends CI_Controller {
 		$data['fullfillmentdetails'] = $this->configurationmodel->fetchFullfillment();
 		$data['procondtiondetails'] = $this->configurationmodel->fetchProductCondition();
 		$data['statusdetails'] = $this->configurationmodel->fetchProductStatus();
+		$data['branddetails'] = $this->configurationmodel->fetchBrand();
 		
 		
 		$this->load->view('store/edittracking',$data);    

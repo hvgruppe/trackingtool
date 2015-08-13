@@ -4,6 +4,7 @@ class Reportsmodel extends CI_Model {
 	public $fullfillment_array = array();
 	public $disposition_array = array();
 	public $status_array = array();
+	public $brand_array = array();
 	
 	public function __construct(){
 		
@@ -42,10 +43,23 @@ class Reportsmodel extends CI_Model {
 			}
 		}
 		
+		$this->db->select('*');
+		$query = $this->db->get('ips_brand');
+		if($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$this->brand_array[$row['BID']] = $row['NAME'];
+			}
+		}
+		
 	}
 
-	public function fetchOrderDetails($data)
+	public function fetchOrderDetails($data, $postfill, $postbrand, $postdisposition)
 	{
+		
+		
 		$excelreport = Array();
 		$excelreport = array(array(" Sale Returns Details "=>"Header"));
 		
@@ -70,10 +84,48 @@ class Reportsmodel extends CI_Model {
 			$this->db->where('orderdate >=', $fromdate);
 			$this->db->where('orderdate <=', $todate);
 		}
-		// $this->db->select('*');
-		// $this->db->from('ips_ordertracking');
-		// $this->db->where('hashordertrackingid', $ordertrackingid );	
 		
+		
+		$fullfill = '';
+		if (!empty($postfill)){
+			
+			foreach($postfill as $val)
+			{
+				$fullfill .= " fullfillment='".$val."' OR ";
+				// $this->db->where("fullfillment = ",$val);
+			}
+			$fullfill = substr($fullfill,0,-3);
+			$fullfill = "(".$fullfill.")";
+			$this->db->where($fullfill);
+		}
+		
+		$brand = '';
+		if (!empty($postbrand)){
+			$this->db->join('ips_productitems', 'ips_ordertracking.ordertrackingid = ips_productitems.ordertrackingid', 'inner');
+			foreach($postbrand as $val)
+			{
+				$brand .= " brand='".$val."' OR ";
+				// $this->db->where("brand = ",$val);
+				
+			}
+			$brand = substr($brand,0,-3);
+			$brand = "(".$brand.")";
+			$this->db->where($brand);
+		}
+		
+		$disposition = '';
+		if (!empty($postdisposition)){
+			
+			foreach($postdisposition as $val)
+			{
+				$disposition .= " disposition='".$val."' OR ";
+				// $this->db->where("disposition = ",$val);
+			}
+			$disposition = substr($disposition,0,-3);
+			$disposition = "(".$disposition.")";
+			$this->db->where($disposition);
+		}
+				
 		$query = $this->db->get();
 		// echo $query->num_rows();
 		if($query->num_rows() > 0)
@@ -85,10 +137,10 @@ class Reportsmodel extends CI_Model {
 				$data = array();
 				$data['ID'] = $row['ordertrackingid'];
 				//$data['Fullfillment'] = $row['fullfillment'];
-				$brand = $row['fullfillment'];
-				if(isset($this->fullfillment_array[$brand]))
+				$fbrand = $row['fullfillment'];
+				if(isset($this->fullfillment_array[$fbrand]))
 				{
-					$data['Fullfillment'] = $this->fullfillment_array[$brand];
+					$data['Fullfillment'] = $this->fullfillment_array[$fbrand];
 				}
 				else
 					$data['Fullfillment'] = '';
@@ -124,7 +176,15 @@ class Reportsmodel extends CI_Model {
 					$i = 0;
 					foreach($itemresult as $itemrow)
 					{
-						
+						// $data['Brand'] = $itemrow['brand'];
+						$probrand = $itemrow['brand'];
+						if(isset($this->brand_array[$probrand]))
+						{
+							$data['Brand'] = $this->brand_array[$probrand];
+						}
+						else
+							$data['Brand'] = '';
+				
 						$data['Product Category'] = $itemrow['category'];
 						$data['Product Serial.No'] = $itemrow['serial'];
 						$data['Item Code'] = $itemrow['upc'];
@@ -180,7 +240,10 @@ class Reportsmodel extends CI_Model {
 				$data['Product Condition'] = $row['product'];
 				$data['Reason for Return'] = $row['remarks'];
 				$data['Case ID'] = $row['caseid'];
-				$data['Case ID Logged Date'] = date('d-m-Y',$row['casedate']);
+				if(strlen($row['casedate'])>4)
+					$data['Case ID Logged Date'] = date('d-m-Y',$row['casedate']);
+				else
+					$data['Case ID Logged Date'] = $row['casedate'];
 				//$data['Status'] = $row['status'];
 				$status = $row['status'];
 				if(isset($this->status_array[$status]))

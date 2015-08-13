@@ -27,6 +27,8 @@
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/metisMenu/dist/metisMenu.min.css" />
     <!-- Timeline CSS -->
 	<link rel="stylesheet" href="<?php echo base_url();?>dist/css/timeline.css" />
+	<!-- Multi Select CSS -->
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/multiselect/css/bootstrap-multiselect.css" />
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?php echo base_url();?>dist/css/sb-admin-2.css" />
 	<!-- Custom Fonts -->
@@ -137,7 +139,7 @@
 														<div class="span3">
 															<div id="divfullfillment" class="form-group">
 																<label>Fullfillment</label>
-																<select class="form-control" id="fullfillment" name="fullfillment" onChange="check_srn_available()">
+																<select class="form-control"  multiple="multiple"  id="fullfillment" name="fullfillment">
 																<option value="">Select Fullfillment</option>
 																<?php
 																	foreach($fullfillmentdetails as $row)
@@ -149,11 +151,33 @@
 															</div>
 														</div>
 														<div class="span3">
-															
+															<div id="divbrand" class="form-group">
+																<label>Brand</label>
+																<select class="form-control"  multiple="multiple"  id="brand" name="brand">
+																<option value="">Select Brand</option>
+																<?php
+																	foreach($branddetails as $row)
+																	{
+																		echo "<option value='".$row['BID']."'>". $row['NAME'] ."</option>";
+																	}
+																?>
+																</select>
+															</div>
 														</div>
 
 														<div class="span3">
-															
+															<div id="divdisposition" class="form-group">
+																<label>Disposition</label>
+																<select class="form-control"  multiple="multiple"  id="disposition" name="disposition">
+																<option value="">Select Disposition</option>
+																<?php
+																	foreach($dispositiondetails as $row)
+																	{
+																		echo "<option value='".$row['DID']."'>". $row['NAME'] ."</option>";
+																	}
+																?>
+																</select>
+															</div>
 														</div>
 														<div class="span3">
 															
@@ -233,6 +257,9 @@
 	<!-- Bootstrap Wizard JavaScript -->
     <script src="<?php echo base_url();?>assets/bootstrap/bootstrap-wizard.js"></script>
 	
+	<!-- Multi Select CSS -->
+	<script src="<?php echo base_url();?>assets/multiselect/js/bootstrap-multiselect.js"></script>
+		
 	<!-- Prettify JavaScript -->	
 	<script src="<?php echo base_url();?>assets/prettify/run_prettify.js"></script>
 	
@@ -264,6 +291,28 @@
 			changeMonth: true,
 			changeYear: true
 		});
+		/*
+		$('#fullfillment').multiselect({
+			multiple:true,
+			noneSelectText:"Select Fullfillment",
+			selectedList:-1
+		}).multiselectfilter();*/
+		
+		$('#fullfillment').multiselect({
+            checkboxName: 'fullfillmentselect[]',
+			noneSelectText:"Select Fullfillment"
+        });
+		
+		$('#brand').multiselect({
+            checkboxName: 'brandselect[]',
+			noneSelectText:"Select Brand"
+        });
+		
+		$('#disposition').multiselect({
+            checkboxName: 'dispositionselect[]',
+			noneSelectText:"Select Disposition"
+        });
+		
 		
 	});	
 	
