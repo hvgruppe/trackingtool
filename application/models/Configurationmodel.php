@@ -36,6 +36,12 @@ class Configurationmodel extends CI_Model {
 		return $query->result_array();
 	}
 	
+	public function fetchCategory()
+	{
+		$str = "select distinct category from ips_productitems";
+		$query = $this->db->query($str);
+		return $query->result_array();
+	}
 	
 	public function fetchIdValues($tblname,$colid,$colname,$val)
 	{

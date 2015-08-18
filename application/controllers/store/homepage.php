@@ -14,16 +14,27 @@ class Homepage extends CI_Controller {
 	public function index()
 	{
 		$crud = new grocery_CRUD();
- 
-        $crud->set_theme('datatables');
-        $crud->set_table('ips_ordertracking');
+				
+		$crud->set_theme('datatables');
+		$crud->set_model('My_Custom_model');
+        $crud->set_table('ips_ordertracking', 'ips_productitems');
         $crud->set_subject('Sales Tracking');
         $crud->required_fields('NAME');
-        // $crud->columns('ordertrackingid','orderid','name','orderdate','Action');
-		//$crud->fields('ordertrackingid','orderid','name','orderdate');
-		$crud->columns('ordertrackingid','fullfillment','orderdate','orderid','returnid','itemrece','caseid','product','status','Action');
 		
-		$crud->display_as('orderdate','Order Date')->display_as('orderid','Order ID')->display_as('returnid','Sales Return ID')->display_as('itemrece','Item Received')->display_as('caseid','Case ID')->display_as('product','Product Condition')->display_as('ordertrackingid','ID');
+		// void set_relation_n_n( string $field_name, string $relation_table, string $selection_table, string $primary_key_alias_to_this_table, string $primary_key_alias_to_selection_table , string $title_field_selection_table [ , string $priority_field_relation ] )
+		$crud->set_relation_n_n('orderdetails', 'ips_ordertracking', 'ips_productitems', 'ips_ordertracking', 'ordertrackingid', 'description','category');
+		
+		
+		// $crud->set_relation('ordertrackingid','ips_productitems','description');
+        
+		// $crud->columns('ordertrackingid','fullfillment','orderdate','orderid','returnid','itemrece','caseid','product','status','Action');
+		
+		// $crud->display_as('orderdate','Order Date')->display_as('orderid','Order ID')->display_as('returnid','Sales Return ID')->display_as('itemrece','Item Received')->display_as('caseid','Case ID')->display_as('product','Product Condition')->display_as('ordertrackingid','ID');
+		
+		
+		$crud->columns('ordertrackingid','description','category','product','itemrece','Action');
+		
+		$crud->display_as('orderid','Order ID')->display_as('itemrece','Item Received')->display_as('product','Product Condition')->display_as('ordertrackingid','ID')->display_as('description','Product Name')->display_as('category','Category');
 		
 		$crud->callback_column('ordertrackingid',array($this,'_callback_webpage_url'));
 		$crud->callback_column('orderdate',array($this,'_callback_dateformat'));

@@ -164,6 +164,21 @@
 																</select>
 															</div>
 														</div>
+														
+														<div class="span3">
+															<div id="divcategory" class="form-group">
+																<label>Category</label>
+																<select class="form-control"  multiple="multiple"  id="category" name="category">
+																<option value="">Select Category</option>
+																<?php
+																	foreach($categorydetails as $row)
+																	{
+																		echo "<option value='".$row['category']."'>". $row['category'] ."</option>";
+																	}
+																?>
+																</select>
+															</div>
+														</div>
 
 														<div class="span3">
 															<div id="divdisposition" class="form-group">
@@ -179,9 +194,8 @@
 																</select>
 															</div>
 														</div>
-														<div class="span3">
-															
-														</div>
+														
+														
 													</div>
 													<div class="row-fluid">
 														<div class="span3">
@@ -313,6 +327,10 @@
 			noneSelectText:"Select Disposition"
         });
 		
+		$('#category').multiselect({
+            checkboxName: 'categoryselect[]',
+			noneSelectText:"Select Category"
+        });
 		
 	});	
 	

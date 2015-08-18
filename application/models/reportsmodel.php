@@ -56,10 +56,10 @@ class Reportsmodel extends CI_Model {
 		
 	}
 
-	public function fetchOrderDetails($data, $postfill, $postbrand, $postdisposition)
+	public function fetchOrderDetails($data, $postfill, $postbrand, $postdisposition, $postcategory)
 	{
 		
-		
+		$flag = 0;
 		$excelreport = Array();
 		$excelreport = array(array(" Sale Returns Details "=>"Header"));
 		
@@ -101,7 +101,12 @@ class Reportsmodel extends CI_Model {
 		
 		$brand = '';
 		if (!empty($postbrand)){
-			$this->db->join('ips_productitems', 'ips_ordertracking.ordertrackingid = ips_productitems.ordertrackingid', 'inner');
+			if($flag == 0)
+			{
+				$this->db->join('ips_productitems', 'ips_ordertracking.ordertrackingid = ips_productitems.ordertrackingid', 'inner');
+				$flag = 1;
+			}
+				
 			foreach($postbrand as $val)
 			{
 				$brand .= " brand='".$val."' OR ";
@@ -111,6 +116,25 @@ class Reportsmodel extends CI_Model {
 			$brand = substr($brand,0,-3);
 			$brand = "(".$brand.")";
 			$this->db->where($brand);
+		}
+		
+		$category = '';
+		if (!empty($postcategory)){
+			if($flag == 0)
+			{
+				$this->db->join('ips_productitems', 'ips_ordertracking.ordertrackingid = ips_productitems.ordertrackingid', 'inner');
+				$flag = 1;
+			}
+				
+			foreach($postcategory as $val)
+			{
+				$category .= " category='".$val."' OR ";
+				// $this->db->where("brand = ",$val);
+				
+			}
+			$category = substr($category,0,-3);
+			$category = "(".$category.")";
+			$this->db->where($category);
 		}
 		
 		$disposition = '';
