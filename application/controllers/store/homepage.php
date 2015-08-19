@@ -32,9 +32,9 @@ class Homepage extends CI_Controller {
 		// $crud->display_as('orderdate','Order Date')->display_as('orderid','Order ID')->display_as('returnid','Sales Return ID')->display_as('itemrece','Item Received')->display_as('caseid','Case ID')->display_as('product','Product Condition')->display_as('ordertrackingid','ID');
 		
 		
-		$crud->columns('ordertrackingid','description','category','product','itemrece','Action');
+		$crud->columns('ordertrackingid','description','category','product','itemrece','cost','mrp','Action');
 		
-		$crud->display_as('orderid','Order ID')->display_as('itemrece','Item Received')->display_as('product','Product Condition')->display_as('ordertrackingid','ID')->display_as('description','Product Name')->display_as('category','Category');
+		$crud->display_as('orderid','Order ID')->display_as('itemrece','Item Received')->display_as('product','Product Condition')->display_as('ordertrackingid','ID')->display_as('description','Product Name')->display_as('category','Category')->display_as('cost','Recovery Min')->display_as('mrp','Recovery Max');
 		
 		$crud->callback_column('ordertrackingid',array($this,'_callback_webpage_url'));
 		$crud->callback_column('orderdate',array($this,'_callback_dateformat'));
@@ -43,6 +43,8 @@ class Homepage extends CI_Controller {
 		// $crud->callback_column('product',array($this,'_callback_product'));
 		$crud->callback_column('status',array($this,'_callback_status'));
 		$crud->callback_column('itemrece',array($this,'_callback_itemrece'));
+		$crud->callback_column('cost',array($this,'_callback_recovery_min'));
+		$crud->callback_column('mrp',array($this,'_callback_recovery_max'));
 		
 		$crud->callback_column('Action',array($this,'_callback_viewpage_url'));
 		
@@ -67,6 +69,50 @@ class Homepage extends CI_Controller {
         // $output = $this->grocery_crud->render();
 		$this->_example_output($output);
 	} 		
+	
+	public function _callback_recovery_min($value, $row)
+	{
+		$qty = $cost = $mrp = $reimbursed = 0;
+		foreach($row as $k=>$v)
+		{
+			if($k == 'qty')
+				$qty = $v;
+			
+			if($k == 'cost')
+				$cost = $v;
+			
+			if($k == 'mrp')
+				$mrp = $v;
+			
+			if($k == 'reimbursed')
+				$reimbursed = $v;
+			
+		}
+		
+			return ($qty * $cost) - $reimbursed;
+	}
+	
+	public function _callback_recovery_max($value, $row)
+	{
+		$qty = $cost = $mrp = $reimbursed = 0;
+		foreach($row as $k=>$v)
+		{
+			if($k == 'qty')
+				$qty = $v;
+			
+			if($k == 'cost')
+				$cost = $v;
+			
+			if($k == 'mrp')
+				$mrp = $v;
+			
+			if($k == 'reimbursed')
+				$reimbursed = $v;
+			
+		}
+		
+			return ($qty * $mrp) - $reimbursed;
+	}
 	
 	public function _callback_itemrece($value, $row)
 	{
