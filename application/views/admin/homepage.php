@@ -287,7 +287,7 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="index.html" class="active"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href=<?php echo site_url('admin/homepage');?> class="active"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-files-o fa-fw"></i>Configuration <span class="fa arrow"></span></a>
@@ -303,6 +303,9 @@
 								</li>
 								<li>
 									<a href=<?php echo site_url('admin/productstatus');?>>Product Status</a>
+								</li>
+								<li>
+									<a href=<?php echo site_url('admin/brand');?>>Brand</a>
 								</li>
                             </ul>
                             <!-- /.nav-second-level -->

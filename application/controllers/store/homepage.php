@@ -88,8 +88,9 @@ class Homepage extends CI_Controller {
 				$reimbursed = $v;
 			
 		}
-		
-			return ($qty * $cost) - $reimbursed;
+		$rminval = ($qty * $cost) - $reimbursed;
+		$rminval =	number_format($rminval, 2, '.', ',');
+		return $rminval;
 	}
 	
 	public function _callback_recovery_max($value, $row)
@@ -111,7 +112,9 @@ class Homepage extends CI_Controller {
 			
 		}
 		
-			return ($qty * $mrp) - $reimbursed;
+		$rmaxval = ($qty * $mrp) - $reimbursed;
+		$rmaxval =	number_format($rmaxval, 2, '.', ',');
+		return $rmaxval;
 	}
 	
 	public function _callback_itemrece($value, $row)

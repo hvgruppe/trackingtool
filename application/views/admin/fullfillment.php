@@ -110,6 +110,9 @@
 								<li>
 									<a href=<?php echo site_url('admin/productstatus');?>>Product Status</a>
 								</li>
+								<li>
+									<a href=<?php echo site_url('admin/brand');?>>Brand</a>
+								</li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
