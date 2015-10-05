@@ -284,8 +284,14 @@
 								<li>
 									<a href=<?php echo site_url('admin/productstatus');?>>Product Status</a>
 								</li>
+								<li>
+									<a href=<?php echo site_url('admin/brand');?>>Brand</a>
+								</li>
                             </ul>
                             <!-- /.nav-second-level -->
+                        </li>
+						<li>
+                            <a href=<?php echo site_url('admin/feedback');?>><i class="fa fa-dashboard fa-fw"></i> Feedback</a>
                         </li>
                         <!--<li>
                             <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>

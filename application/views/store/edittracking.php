@@ -1318,6 +1318,26 @@
 		var casedetails = $("#casedetails").val();
 		var casedate = $("#casedate").val();
 		var notes = $("#notes").val();
+		
+		if(notes !="")
+			{
+				$.ajax({
+					url:"addnotes",
+					type:"POST",
+					data:{"casenotes":notes,"caseid":casedetails,"casedate":casedate,"hashorderid":$("#hashordertrackingid").val()},
+					success:function(msg){
+						$("#divcasenote").html(msg);
+						$("#notes").val("");
+					}
+				});
+			}
+			else
+			{
+				$(".modal-body").html("<div class='alert alert-warning'>Notes should not be empty!</div>");
+					$('#myModal').modal('toggle');
+			}
+			
+		/*
 		if(casedetails != "" && casedate != "")
 		{
 			if(notes !="")
@@ -1342,7 +1362,7 @@
 		{
 			$(".modal-body").html("<div class='alert alert-warning'>First add Case ID and Case Date!</div>");
 				$('#myModal').modal('toggle');
-		}
+		}*/
 	});
 	
 	function check_srn_available(){

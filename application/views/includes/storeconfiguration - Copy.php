@@ -53,12 +53,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-				<a class="navbar-brand" href=<?php echo site_url('admin/homepage');?>>
+				<a class="navbar-brand" href=<?php echo site_url('store/homepage');?>>
 					<img src="<?php echo base_url();?>img/gizmoland.png" alt="gizmoland" />
 				</a>
             </div>
             <!-- /.navbar-header -->
+			
             <ul class="nav navbar-top-links navbar-right">
+                
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -93,9 +95,12 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="homepage"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href=<?php echo site_url('store/homepage');?>><i class="fa fa-th-list fa-fw"></i> Order Management</a>
                         </li>
-                        <li>
+						<li>
+                            <a href=<?php echo site_url('store/reports');?>><i class="fa fa-table fa-fw"></i> Reports </a>
+                        </li>
+                        <!--<li>
                             <a href="#"><i class="fa fa-files-o fa-fw"></i>Configuration <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
 								<li>
@@ -110,15 +115,9 @@
 								<li>
 									<a href=<?php echo site_url('admin/productstatus');?>>Product Status</a>
 								</li>
-								<li>
-									<a href=<?php echo site_url('admin/brand');?>>Brand</a>
-								</li>
                             </ul>
+                        </li>-->
                             <!-- /.nav-second-level -->
-                        </li>
-						<li>
-                            <a href=<?php echo site_url('admin/feedback');?>><i class="fa fa-dashboard fa-fw"></i> Feedback</a>
-                        </li>
                         <!--<li>
                             <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
                         </li>
@@ -199,36 +198,3 @@
             </div>
             <!-- /.navbar-static-side -->
         </nav>
-	<div id="page-wrapper">
-		<div class="row">
-			<div class="col-lg-12">
-				<h1 class="page-header">Fullfillment</h1>
-			</div>
-			<!-- /.col-lg-12 -->
-		</div>
-		<!-- /.row -->
-		<div class="panel panel-default">
-			<div class="panel-heading">List of Fullfillment</div>
-			<div class="panel-body">
-				<?php echo $output; ?>
-			</div>
-		</div> 
-	   
-	</div>
-	<!-- /#page-wrapper -->
-
-    </div>
-    <!-- /#wrapper -->
-
-	<!-- Bootstrap Core JavaScript -->
-    <script src="<?php echo base_url();?>assets/bootstrap/dist/js/bootstrap.min.js"></script>
-
-	<!-- Metis Menu Plugin JavaScript -->
-    <script src="<?php echo base_url();?>assets/metisMenu/dist/metisMenu.min.js"></script>
-	
-    <!-- Custom Theme JavaScript -->
-    <script src="<?php echo base_url();?>dist/js/sb-admin-2.js"></script>
-
-</body>
-
-</html>

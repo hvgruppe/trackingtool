@@ -32,7 +32,7 @@ class Homepage extends CI_Controller {
 		// $crud->display_as('orderdate','Order Date')->display_as('orderid','Order ID')->display_as('returnid','Sales Return ID')->display_as('itemrece','Item Received')->display_as('caseid','Case ID')->display_as('product','Product Condition')->display_as('ordertrackingid','ID');
 		
 		
-		$crud->columns('ordertrackingid','description','category','product','itemrece','cost','mrp','Action');
+		$crud->columns('ordertrackingid','orderid','description','category','product','itemrece','cost','mrp','Action');
 		
 		$crud->display_as('orderid','Order ID')->display_as('itemrece','Item Received')->display_as('product','Product Condition')->display_as('ordertrackingid','ID')->display_as('description','Product Name')->display_as('category','Category')->display_as('cost','Recovery Min')->display_as('mrp','Recovery Max');
 		

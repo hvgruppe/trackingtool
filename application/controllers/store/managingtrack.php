@@ -160,7 +160,7 @@ class Managingtrack extends CI_Controller {
 	public function addnotes()
 	{
 		$str = '';
-		if($this->input->post('casenotes'))
+		if($this->input->post('hashorderid'))
 		{
 			$casedata = array();
 			$casedata['caseid'] = $this->input->post('caseid');
