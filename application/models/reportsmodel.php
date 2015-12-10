@@ -284,6 +284,132 @@ class Reportsmodel extends CI_Model {
 		}
 		return $excelreport;
 	}
+	
+	public function fetchFeedbackDetails($data, $postdesignation, $postinterest, $postproduct, $postexperience, $postprofessional, $postknowby)
+	{
+		$admin_db = $this->load->database('db2', TRUE);
+		$flag = 0;
+		$excelreport = Array();
+		$excelreport = array(array("Feedback Details "=>"Header"));
+		
+
+		$fromdate = strtotime($data['fromdate']);
+		$todate = strtotime($data['todate']);
+		$admin_db->select('*');
+		$admin_db->from('fb_feedback');
+		$admin_db->where('timestamp >=', $fromdate);
+		$admin_db->where('timestamp <=', $todate);
+		
+		
+		if (!empty($postdesignation)){
+			$designation = '(';
+			foreach($postdesignation as $val)
+			{
+				//$admin_db->or_like('designation', $val);
+				$designation .= " designation like '%$val%' ";
+			}
+				
+			$designation .= ')';
+			$admin_db->or_where($designation);
+		}
+		
+		
+		if (!empty($postinterest)){
+			$interest = '(';
+			foreach($postinterest as $val)
+			{
+				//$admin_db->or_like('interest', $val);
+				$interest .= " interest like '%$val%' ";
+			}
+			$interest .= ')';
+			$admin_db->or_where($interest);
+		}
+		
+		
+		
+		if (!empty($postproduct)){
+			$product = '(';
+			foreach($postproduct as $val)
+			{
+				//$admin_db->or_like('currently', $val);
+				$product .= " currently like '%$val%' ";
+			}
+			$product .= ')';
+			$admin_db->or_where($product);
+		}
+		
+		if (!empty($postexperience)){
+							
+			$experience = '(';
+			foreach($postexperience as $val)
+			{
+				//$admin_db->or_like('customerexp', $val);
+				$experience .= " customerexp like '%$val%' ";
+			}
+			$experience .= ')';
+			$admin_db->or_where($experience);
+		}
+		
+		
+		if (!empty($postprofessional)){
+							
+			$professional = '(';
+			foreach($postprofessional as $val)
+			{
+				//$admin_db->or_like('customerexp', $val);
+				$professional .= " salepro like '%$val%' ";
+			}
+			$professional .= ')';
+			$admin_db->or_where($professional);
+		}
+		
+		if (!empty($postknowby)){
+							
+			$knownby = '(';
+			foreach($postknowby as $val)
+			{
+				//$admin_db->or_like('customerexp', $val);
+				$knownby .= " knownby like '%$val%' ";
+			}
+			$knownby .= ')';
+			$admin_db->or_where($knownby);
+		}
+		
+						
+		$query = $admin_db->get();
+		//echo $query->num_rows();
+		//echo "<br/>";
+		//$string =   $admin_db->last_query();
+		//echo $string;
+		
+		
+		if($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			
+			foreach($result as $row)
+			{
+				$data = array();
+				$data['ID'] = $row['FBID'];
+				$data['Name'] = $row['name'];
+				$data['Mobile'] = $row['mobile'];
+				$data['Mail ID'] = $row['mailid'];
+				
+				$data['Designation'] = $row['designation'];
+				$data['Interested'] = $row['interest'];
+				$data['Currently Using'] = $row['currently'];
+				$data['Sales Professional'] = $row['salepro'];
+				$data['Customer Experience'] = $row['customerexp'];
+				$data['Known By'] = $row['knownby'];
+				$data['Appreciated By'] = $row['appreciate'];
+				
+				array_push($excelreport,$data);
+				
+			}
+			
+		}
+		return $excelreport;
+	}
 }
 
 /* End of file Logindetailsmodel.php */
