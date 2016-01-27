@@ -37,6 +37,7 @@ class Addtracking extends CI_Controller {
 	{
 		if(isset($_POST))
 		{
+			log_message('info',print_r($_POST,TRUE));
 			$data = array();
 			$casedata = array();
 			$productdata = array();
@@ -87,6 +88,11 @@ class Addtracking extends CI_Controller {
 			$productdata['reimbursed'] = $this->input->post('reimbursed');
 			$productdata['number_of_entries'] = $this->input->post('number_of_entries');
 			*/
+
+			log_message('info', '-----------Before Insert Order Tracking-------------------');
+			log_message('info',print_r($data,TRUE));
+			log_message('info',print_r($casedata,TRUE));
+			log_message('info',print_r($productdata,TRUE));
 			
 			$this->load->model('trackingmodel');
 			$id = $this->trackingmodel->add_tracking($data, $casedata,$productdata);

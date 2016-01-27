@@ -263,7 +263,7 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href=<?php echo site_url('admin/fullfillment');?>><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href=<?php echo site_url('login');?>><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -307,7 +307,7 @@
 								<li>
 									<a href=<?php echo site_url('admin/brand');?>>Brand</a>
 								</li>
-                            </ul>
+                                                           </ul>
                             <!-- /.nav-second-level -->
                         </li>
 						<li>
@@ -315,6 +315,12 @@
                         </li>
 						<li>
                             <a href=<?php echo site_url('admin/reports');?> ><i class="fa fa-table"></i> Feedback Reports</a>
+                        </li>
+                        <li>
+                            <a href=<?php echo site_url('admin/dashboard');?>>Reimbursement Report</a>
+                        </li>
+                        <li>
+                            <a href=<?php echo site_url('admin/caselog');?>>Case Log Report</a>
                         </li>
                         <!--<li>
                             <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>

@@ -113,6 +113,7 @@
 								<li>
 									<a href=<?php echo site_url('admin/brand');?>>Brand</a>
 								</li>
+
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -121,6 +122,12 @@
                         </li>
 						<li>
                             <a href=<?php echo site_url('admin/reports');?> ><i class="fa fa-table"></i> Feedback Reports</a>
+                        </li>
+                        <li>
+                            <a href=<?php echo site_url('admin/dashboard');?>>Reimbursement Report</a>
+                        </li>
+                        <li>
+                            <a href=<?php echo site_url('admin/caselog');?>>Case Log Report</a>
                         </li>
                         <!--<li>
                             <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>

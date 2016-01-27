@@ -103,6 +103,8 @@ class Managingtrack extends CI_Controller {
 	{
 		if(isset($_POST))
 		{
+			log_message('info',print_r($_POST,TRUE));
+
 			$data = array();
 			$casedata = array();
 			
@@ -149,6 +151,11 @@ class Managingtrack extends CI_Controller {
 			
 			$casedata['casenotes'] = $this->input->post('notes');
 			
+			log_message('info', '-----------Before Update Order Tracking-------------------');
+			log_message('info',print_r($data,TRUE));
+			log_message('info',print_r($casedata,TRUE));
+			log_message('info',print_r($productdata,TRUE));
+			
 			$this->load->model('trackingmodel');
 			$id = $this->trackingmodel->update_tracking($data,$casedata);
 			// echo $id;
@@ -162,6 +169,7 @@ class Managingtrack extends CI_Controller {
 		$str = '';
 		if($this->input->post('hashorderid'))
 		{
+			log_message('info', '----Add Notes: Hash Order ID-------'.$this->input->post('hashorderid').'------');
 			$casedata = array();
 			$casedata['caseid'] = $this->input->post('caseid');
 			if(strlen($this->input->post('casedate'))>4)
@@ -169,6 +177,8 @@ class Managingtrack extends CI_Controller {
 			else
 				$data['casedate'] = $this->input->post('casedate');
 			$casedata['casenotes'] = $this->input->post('casenotes');
+			
+			log_message('info',print_r($casedata,TRUE));
 			
 			$orderid = $this->input->post('hashorderid');
 			$this->load->model('trackingmodel');

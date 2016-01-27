@@ -3,19 +3,30 @@ class Trackingmodel extends CI_Model {
 
 	public function add_tracking($data, $casedata, $productdata)
 	{
+		log_message('info', '-----------In Trackingmodel, Before Add tracking -------------------');
+		log_message('info',print_r($data,TRUE));
+		log_message('info',print_r($casedata,TRUE));
+		log_message('info',print_r($productdata,TRUE));
+		
+
 		$this->db->insert('ips_ordertracking', $data); 
 		$autoid = $this->db->insert_id();
 		
+		log_message('info', $autoid.'----Tracking ID');
+
 		$this->db->where('id', $autoid);
 		$orderid = 'ORD'.$autoid;
 		$hashorderid = md5($orderid);
 		$this->db->set('ordertrackingid', $orderid);
 		$this->db->set('hashordertrackingid', $hashorderid);
 		
+		log_message('info', '-----------In Trackingmodel, Order ID: '.$orderid.' -------------------');
+
 		$this->db->update('ips_ordertracking');
 		
 		if($this->input->post('number_of_entries')>=0)
 		{
+			log_message('info', $this->input->post('number_of_entries').'----Number of Entries');
 			$cntitem = $this->input->post('number_of_entries') + 1;
 			for($i=0;$i<$cntitem;$i++)
 			{
@@ -40,6 +51,8 @@ class Trackingmodel extends CI_Model {
 					$productdata['cost'] = $this->input->post($cost);
 					$productdata['mrp'] = $this->input->post($mrp);
 					$productdata['reimbursed'] = $this->input->post($reimbursed);
+
+					log_message('info',print_r($productdata,TRUE));
 					$this->db->insert('ips_productitems', $productdata); 
 					// $proid = $this->db->insert_id();
 				}
@@ -118,6 +131,7 @@ class Trackingmodel extends CI_Model {
 		if($casedata['casenotes'] != "")
 		{
 			$casedata['ordertrackingid'] = $orderid;
+			log_message('info',print_r($casedata,TRUE));
 			$this->db->insert('ips_case', $casedata); 
 			$caseid = $this->db->insert_id();	
 		}
@@ -128,10 +142,17 @@ class Trackingmodel extends CI_Model {
 	public function update_tracking($data, $casedata)
 	{
 		$hashordertrackingid = $data['hashordertrackingid'];
+
+		log_message('info', $hashordertrackingid.'----Before unset Hash OrderTracking ID');
+		log_message('info',print_r($data,TRUE));
+
 		unset($data['hashordertrackingid']);
   
 		$this->db->where('hashordertrackingid', $hashordertrackingid);
 		
+		log_message('info', $hashordertrackingid.'----Hash OrderTracking ID');
+		log_message('info',print_r($data,TRUE));
+
 		$str = $this->db->update('ips_ordertracking', $data);
 		$ordertrackingid = '';
 		$query = $this->db->query("select ordertrackingid from ips_ordertracking where hashordertrackingid='".$hashordertrackingid."'");
@@ -223,6 +244,8 @@ class Trackingmodel extends CI_Model {
 		
 		if($this->input->post('number_of_entries')>=0)
 		{
+			log_message('info', $this->input->post('number_of_entries').'----Number of Entries!');
+
 			$cntitem = $this->input->post('number_of_entries') + 1;
 			for($i=0;$i<$cntitem;$i++)
 			{
@@ -410,7 +433,7 @@ class Trackingmodel extends CI_Model {
 	public function update_notes($hashordertrackingid,$casedata)
 	{
 		$ordertrackingid = '';
-		$query = $this->db->query("select ordertrackingid from ips_ordertracking where hashordertrackingid='".$hashordertrackingid."'");
+		$query = $this->db->query("select count(ordertrackingid) from ips_ordertracking where hashordertrackingid='".$hashordertrackingid."'");
 		
 		if ($query->num_rows() > 0)
 		{
@@ -422,6 +445,10 @@ class Trackingmodel extends CI_Model {
 			if($casedata['casenotes'] != "")
 			{
 				$casedata['ordertrackingid'] = $ordertrackingid;
+				
+				log_message('info', $ordertrackingid.'----Hash OrderTracking ID');
+				log_message('info',print_r($casedata,TRUE));
+
 				$this->db->insert('ips_case', $casedata); 
 				// $caseid = $this->db->insert_id();
 				// return ($this->db->affected_rows() > 0) ? false : true;
@@ -448,6 +475,168 @@ class Trackingmodel extends CI_Model {
 		return $casedata;
 		
 	}
+
+	public function fetchCountDuration($durationTime, $currentTime)
+	{
+		$ordertrackingid = '';
+		$query = $this->db->query("select count(ot.ordertrackingid) as cnt from ips_ordertracking ot where orderdate>='".$durationTime."' and  orderdate<='".$currentTime."'");
+		
+		$result = $query->row();
+		
+		return $result->cnt;
+	}
+
+	public function fetchDataDuration($durationTime, $currentTime)
+	{
+		
+		$ordertrackingid = '';
+		$query = $this->db->query("select ff.name, count(ot.ordertrackingid) as cnt from ips_ordertracking ot inner join ips_fullfillment ff on ot.fullfillment = ff.fid  where orderdate>='".$durationTime."' and  orderdate<='".$currentTime."' group by ot.fullfillment");
+		
+		$result = $query->result_array();
+		
+		return $result;
+		
+	}
+
+	public function fetchDashboard($startTime, $currTime, $brand)
+	{
+		if($brand != '')
+			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where orderdate>='".$startTime."' and  orderdate<='".$currTime."' and ff.name='".$brand."' and reimbursed=0");
+		else
+			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where orderdate>='".$startTime."' and  orderdate<='".$currTime."' and reimbursed=0" );
+		//$query = $this->db->get();
+
+		if($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			$data = array();
+			foreach($result as $row)
+			{
+				$data['ordernumber'] = $row['ordernumber'];
+				$data['description'] = $row['description'];
+				$data['category'] = $row['category'];
+				$data['upc'] = $row['upc'];			
+				
+			}
+			return $result;
+		}
+	}
+
+	public function fetchCase($startTime, $currTime, $brand)
+	{
+		if($brand != '')
+			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where orderdate>='".$startTime."' and  orderdate<='".$currTime."' and ff.name='".$brand."' and reimbursed=0");
+		else
+			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where orderdate>='".$startTime."' and  orderdate<='".$currTime."' and reimbursed=0" );
+		//$query = $this->db->get();
+
+		if($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			$data = array();
+			foreach($result as $row)
+			{
+				$data['ordernumber'] = $row['ordernumber'];
+			}
+			return $result;
+		}
+
+
+	}
+
+	public function fetchCaseCountDuration($durationTime, $currentTime)
+	{
+		$ordertrackingid = '';
+		$query = $this->db->query("select ot.ordertrackingid from ips_ordertracking ot where orderdate>='".$durationTime."' and  orderdate<='".$currentTime."'");
+		
+		$ot_data = array();
+		if($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			$i = 0;
+			foreach($result as $row)
+			{
+				$ot_data[$i] = $row['ordertrackingid'];
+				$i++;
+			}
+		}
+
+		$casequery = $this->db->query("select distinct ordertrackingid from ips_case");
+		$case_data = array();
+		if($casequery->num_rows() > 0)
+		{
+			$result = $casequery->result_array();
+			$i = 0;
+			foreach($result as $row)
+			{
+				$case_data[$i] = $row['ordertrackingid'];
+				$i++;
+			}
+		}
+		//print_r($ot_data);
+		//print_r($case_data);
+
+		if(count($ot_data)>0)
+		{
+			$newdata = array_diff($ot_data, $case_data);
+		}
+		//print_r($newdata);
+		
+		//echo implode("' or '", $newdata);
+
+		return count($newdata);
+	}
+
+	public function fetchCaseDataDuration($durationTime, $currentTime)
+	{
+		$ordertrackingid = '';
+		$query = $this->db->query("select ot.ordertrackingid from ips_ordertracking ot where orderdate>='".$durationTime."' and  orderdate<='".$currentTime."'");
+		
+		$ot_data = array();
+		if($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			$i = 0;
+			foreach($result as $row)
+			{
+				$ot_data[$i] = $row['ordertrackingid'];
+				$i++;
+			}
+		}
+
+		$casequery = $this->db->query("select distinct ordertrackingid from ips_case");
+		$case_data = array();
+		if($casequery->num_rows() > 0)
+		{
+			$result = $casequery->result_array();
+			$i = 0;
+			foreach($result as $row)
+			{
+				$case_data[$i] = $row['ordertrackingid'];
+				$i++;
+			}
+		}
+		//print_r($ot_data);
+		//print_r($case_data);
+
+		if(count($ot_data)>0)
+		{
+			$newdata = array_diff($ot_data, $case_data);
+		}
+		
+
+		//echo implode("' or '", $newdata);
+
+		$ordertrackingid = '';
+		$query = $this->db->query("select ff.name, count(ot.ordertrackingid) as cnt from ips_ordertracking ot inner join ips_fullfillment ff on ot.fullfillment = ff.fid  where orderdate>='".$durationTime."' and  orderdate<='".$currentTime."' and ('".implode("' or '", $newdata)."')group by ot.fullfillment");
+		
+		$result = $query->result_array();
+		
+		return $result;
+		
+	}
+
+
 }
 
 /* End of file Logindetailsmodel.php */
