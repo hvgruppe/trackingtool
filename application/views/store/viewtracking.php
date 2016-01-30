@@ -135,7 +135,7 @@
 																<td class="clstd">Item Received :</td>
 																<td>
 																	<?php
-																		if($itemrece == 'Y') { echo "Yes"; } else { echo "No"; }
+																		if($itemrece == 'Y' || $itemrece == 'y') { echo "Yes"; } else { echo "No"; }
 																	?>
 																</td>
 																

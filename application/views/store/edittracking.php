@@ -221,7 +221,7 @@
 																<label>Item Received</label>
 																<select class="form-control" id="itemrece" name="itemrece">
 																	<?php
-																	if($itemrece == 'Y') { ?>
+																	if($itemrece == 'Y' || $itemrece == 'y' ) { ?>
 																		<option selected value="y">Yes</option>
 																		<option value="n">No</option>
 																	<?php } else { ?>
