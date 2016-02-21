@@ -479,7 +479,8 @@ class Trackingmodel extends CI_Model {
 	public function fetchCountDuration($durationTime, $currentTime)
 	{
 		$ordertrackingid = '';
-		$query = $this->db->query("select count(ot.ordertrackingid) as cnt from ips_ordertracking ot where orderdate>='".$durationTime."' and  orderdate<='".$currentTime."'");
+		//echo "select count(ot.ordertrackingid) as cnt from ips_ordertracking ot where return_rece_date>='".$durationTime."' and  return_rece_date<='".$currentTime."'";
+		$query = $this->db->query("select count(ot.ordertrackingid) as cnt from ips_ordertracking ot  inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid where return_rece_date>='".$durationTime."' and  return_rece_date<='".$currentTime."'  and reimbursed=0 and itemrece='y'");
 		
 		$result = $query->row();
 		
@@ -490,7 +491,7 @@ class Trackingmodel extends CI_Model {
 	{
 		
 		$ordertrackingid = '';
-		$query = $this->db->query("select ff.name, count(ot.ordertrackingid) as cnt from ips_ordertracking ot inner join ips_fullfillment ff on ot.fullfillment = ff.fid  where orderdate>='".$durationTime."' and  orderdate<='".$currentTime."' group by ot.fullfillment");
+		$query = $this->db->query("select ff.name, count(ot.ordertrackingid) as cnt from ips_ordertracking ot  inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment = ff.fid  where return_rece_date>='".$durationTime."' and  return_rece_date<='".$currentTime."'  and reimbursed=0  and itemrece='y' group by ot.fullfillment");
 		
 		$result = $query->result_array();
 		
@@ -501,9 +502,9 @@ class Trackingmodel extends CI_Model {
 	public function fetchDashboard($startTime, $currTime, $brand)
 	{
 		if($brand != '')
-			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where orderdate>='".$startTime."' and  orderdate<='".$currTime."' and ff.name='".$brand."' and reimbursed=0");
+			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc, return_rece_date  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where return_rece_date>='".$startTime."' and  return_rece_date<='".$currTime."' and ff.name='".$brand."' and reimbursed=0  and itemrece='y'");
 		else
-			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where orderdate>='".$startTime."' and  orderdate<='".$currTime."' and reimbursed=0" );
+			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc, return_rece_date  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where return_rece_date>='".$startTime."' and  return_rece_date<='".$currTime."' and reimbursed=0  and itemrece='y'" );
 		//$query = $this->db->get();
 
 		if($query->num_rows() > 0)
@@ -515,7 +516,9 @@ class Trackingmodel extends CI_Model {
 				$data['ordernumber'] = $row['ordernumber'];
 				$data['description'] = $row['description'];
 				$data['category'] = $row['category'];
-				$data['upc'] = $row['upc'];			
+				$data['upc'] = $row['upc'];	
+				$data['return_rece_date'] = $row['return_rece_date'];	
+				
 				
 			}
 			return $result;
@@ -634,6 +637,61 @@ class Trackingmodel extends CI_Model {
 		
 		return $result;
 		
+	}
+	
+	
+	/*
+		Products that are not received
+		
+	*/
+	
+	public function fetchCountPNRDuration($durationTime, $currentTime)
+	{
+		$ordertrackingid = '';
+		
+		$query = $this->db->query("select count(ot.ordertrackingid) as cnt from ips_ordertracking ot  inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid where return_initiate_date>='".$durationTime."' and  return_initiate_date<='".$currentTime."'   and itemrece='n'");
+		
+		$result = $query->row();
+		
+		return $result->cnt;
+	}
+
+	public function fetchDataPNRDuration($durationTime, $currentTime)
+	{
+		
+		$ordertrackingid = '';
+		$query = $this->db->query("select ff.name, count(ot.ordertrackingid) as cnt from ips_ordertracking ot  inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment = ff.fid  where return_initiate_date>='".$durationTime."' and  return_initiate_date<='".$currentTime."'  and itemrece='n' group by ot.fullfillment");
+		
+		$result = $query->result_array();
+		
+		return $result;
+		
+	}
+
+	public function fetchPNRDashboard($startTime, $currTime, $brand)
+	{
+		if($brand != '')
+			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc, return_initiate_date  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where return_initiate_date>='".$startTime."' and  return_initiate_date<='".$currTime."' and ff.name='".$brand."'  and itemrece='n'");
+		else
+			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc, return_initiate_date  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where return_initiate_date>='".$startTime."' and  return_initiate_date<='".$currTime."' and itemrece='n'" );
+		//$query = $this->db->get();
+
+		if($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			$data = array();
+			foreach($result as $row)
+			{
+				$data['ordernumber'] = $row['ordernumber'];
+				$data['description'] = $row['description'];
+				$data['category'] = $row['category'];
+				$data['upc'] = $row['upc'];	
+				$data['return_initiate_date'] = $row['return_initiate_date'];	
+				
+				
+			}
+			return $result;
+		}
 	}
 
 

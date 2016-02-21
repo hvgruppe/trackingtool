@@ -88,6 +88,15 @@
                         <li>
                             <a href=<?php echo site_url('store/homepage');?>><i class="fa fa-th-list fa-fw"></i> Order Management</a>
                         </li>
+						<li>
+                            <a href=<?php echo site_url('admin/dashboard');?>>Reimbursement Report</a>
+                        </li>
+                        <li>
+                            <a href=<?php echo site_url('admin/caselog');?>>Case Log Report</a>
+                        </li>
+						<li>
+                            <a href=<?php echo site_url('admin/productreceive');?>>Product Not Yet Received</a>
+                        </li>
                         
                         <!--<li>
                             <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>

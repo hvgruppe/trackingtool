@@ -151,7 +151,7 @@
 				          	<th class="headerclass">Description</th>
 				          	<th class="headerclass">Category</th>
 				          	<th class="headerclass">UPC</th>
-							<th class="headerclass">Return Date</th>
+							<th class="headerclass">Initiate Date</th>
                  		</tr>
               		</thead>
               		<tbody></tbody>
@@ -161,7 +161,7 @@
 				          	<th class="headerclass">Description</th>
 				          	<th class="headerclass">Category</th>
 				          	<th class="headerclass">UPC</th>
-							<th class="headerclass">Return Date</th>
+							<th class="headerclass">Initiate Date</th>
 				        </tr>
               		</tfoot>
               	</table> 
@@ -215,7 +215,7 @@
 	        "height": "600"
 	    });
 
-	  	 var url = "dashboard/fetchChart";
+	  	 var url = "productreceive/fetchChart";
 	    revenueChart.setXMLUrl(url);
 	    revenueChart.render();
 		
@@ -382,11 +382,11 @@
         if(det[2])
         	brand = det[2];
 
-        //var url = "/dashboard/showDataTableForDashboard?startTime=" + startTime + "&currTime=" + currTime  + "&brand=" + brand
+        //var url = "/productreceive/showDataTableForDashboard?startTime=" + startTime + "&currTime=" + currTime  + "&brand=" + brand
         $('#example').dataTable().fnDestroy();
         clientTable = $('#example').DataTable({
 		    	"ajax":{
-             		"url":"dashboard/showDataTableForDashboard",
+             		"url":"productreceive/showDataTableForDashboard",
              		type:"POST",
 					data:{"startTime":startTime,"currTime":currTime,"brand":brand},
              	},
@@ -403,7 +403,7 @@
                     { "data": "description" },
                     { "data": "category" },
                     { "data": "upc" },
-					{ "data": "return_rece_date" }
+					{ "data": "return_initiate_date" }
                     //{ "data": "rowid"}
                 ]
 		    });
@@ -413,7 +413,7 @@
 			        }, 600);
         /*
         $.ajax({
-			url:"dashboard/showDataTableForDashboard",
+			url:"productreceive/showDataTableForDashboard",
 			type:"POST",
 			data:{"startTime":startTime,"currTime":currTime,"brand":brand},
 			success:function(msg){

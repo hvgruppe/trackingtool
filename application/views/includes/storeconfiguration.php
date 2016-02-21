@@ -99,6 +99,15 @@
 						<li>
                             <a href=<?php echo site_url('store/reports');?>><i class="fa fa-table fa-fw"></i> Reports </a>
                         </li>
+						<li>
+                            <a href=<?php echo site_url('admin/dashboard');?>>Reimbursement Report</a>
+                        </li>
+                        <li>
+                            <a href=<?php echo site_url('admin/caselog');?>>Case Log Report</a>
+                        </li>
+						<li>
+                            <a href=<?php echo site_url('admin/productreceive');?>>Product Not Yet Received</a>
+                        </li>
                         <!--<li>
                             <a href="#"><i class="fa fa-files-o fa-fw"></i>Configuration <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Dashboard extends CI_Controller {
+class Productreceive extends CI_Controller {
 
 	public function __construct()
 	{
@@ -13,7 +13,7 @@ class Dashboard extends CI_Controller {
 	public function index()
 	{
 				
-		$this->load->view('admin/dashboard'); 
+		$this->load->view('admin/productreceive'); 
 	} 
 
 	
@@ -24,9 +24,9 @@ class Dashboard extends CI_Controller {
 		
 		//$chart = array();
 
-		$strGraph = '<chart caption="Reimbursement Tracking" bgcolor="FFFFFF" pieborderthickness="2" piebordercolor="FFFFFF" basefontsize="9" usehovercolor="1" hover="CCCCCC" showlabels="1" showvalue="1" showvalueintooltip="1" hoverfillcolor="CCCCCC" showborder="0">';
+		$strGraph = '<chart caption="Product not received" bgcolor="FFFFFF" pieborderthickness="2" piebordercolor="FFFFFF" basefontsize="9" usehovercolor="1" hover="CCCCCC" showlabels="1" showvalue="1" showvalueintooltip="1" hoverfillcolor="CCCCCC" showborder="0">';
 		
-		$strGraph .='<category label="Reimbursement Tracking" color="FFFFFF" alpha="20">';
+		$strGraph .='<category label="Product not received" color="FFFFFF" alpha="20">';
 		
 
 		$currTime = time();
@@ -36,11 +36,11 @@ class Dashboard extends CI_Controller {
 		$cal30days = $currTime - (86400*30);
 		$cal365days = $currTime - (86400*1065);
 		
-		$val150 = $this->trackingmodel->fetchCountDuration($cal10days,$currTime);	
+		$val150 = $this->trackingmodel->fetchCountPNRDuration($cal10days,$currTime);	
 		if($val150 > 0 ){
 			$strGraph .='<category link="j-myJS-'.$cal10days.','.$currTime.'"  label="Less than 10 Days ('.$val150.')" value="'.$val150.'" color="6baa01">';
 			
-			$below10days = $this->trackingmodel->fetchDataDuration($cal10days,$currTime);
+			$below10days = $this->trackingmodel->fetchDataPNRDuration($cal10days,$currTime);
 			foreach($below10days as $br)
 			{
 				$strGraph .='<category link="j-myJS-'.$cal10days.','.$currTime.','.$br['name'].'" label="'.$br['name'].'('.$br['cnt'].')" value="'.$br['cnt'].'" color="6baa01" />';
@@ -50,11 +50,11 @@ class Dashboard extends CI_Controller {
 
 		
 		
-		$val20 = $this->trackingmodel->fetchCountDuration($cal30days,$cal10days);	
+		$val20 = $this->trackingmodel->fetchCountPNRDuration($cal30days,$cal10days);	
 		if($val20 > 0){
 			$strGraph .='<category link="j-myJS-'.$cal30days.','.$cal10days.'"  label="Less than 30 Days and More than 10 Days  ('.$val20.')" value="'.$val20.'" color="f8bd19">';
 
-			$below20days = $this->trackingmodel->fetchDataDuration($cal30days,$cal10days);
+			$below20days = $this->trackingmodel->fetchDataPNRDuration($cal30days,$cal10days);
 			foreach($below20days as $br)
 			{
 				$strGraph .='<category link="j-myJS-'.$cal30days.','.$cal10days.','.$br['name'].'" label="'.$br['name'].'('.$br['cnt'].')" value="'.$br['cnt'].'" color="f8bd19" />';
@@ -64,11 +64,11 @@ class Dashboard extends CI_Controller {
 		
 		
 		
-		$val30 = $this->trackingmodel->fetchCountDuration($cal365days,$cal30days);	
+		$val30 = $this->trackingmodel->fetchCountPNRDuration($cal365days,$cal30days);	
 		
 		if($val30 >0){
 			$strGraph .='<category link="j-myJS-'.$cal365days.','.$cal30days.'"  label="More than 30 Days ('.$val30.')" value="'.$val30.'" color="FF0000">';
-			$below30days = $this->trackingmodel->fetchDataDuration($cal365days,$cal30days);
+			$below30days = $this->trackingmodel->fetchDataPNRDuration($cal365days,$cal30days);
 			foreach($below30days as $br)
 			{
 				$strGraph .='<category link="j-myJS-'.$cal365days.','.$cal30days.','.$br['name'].'" label="'.$br['name'].'('.$br['cnt'].')" value="'.$br['cnt'].'" color="FF0000" />';
@@ -90,7 +90,7 @@ class Dashboard extends CI_Controller {
 
 		
 		$this->load->model('trackingmodel');
-		$result = $this->trackingmodel->fetchDashboard($startTime, $currTime, $brand);
+		$result = $this->trackingmodel->fetchPNRDashboard($startTime, $currTime, $brand);
 		$dataList = array();
 		foreach($result as $d){
 			$data = array(
@@ -98,7 +98,7 @@ class Dashboard extends CI_Controller {
 					'description' => $d['description'],
 					'category' => $d['category'],
 					'upc' => $d['upc'],
-					'return_rece_date' => date("d-m-Y H:i:s", $d['return_rece_date'])
+					'return_initiate_date' => date("d-m-Y H:i:s", $d['return_initiate_date'])
 				);
 			array_push($dataList, $data);
 
