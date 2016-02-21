@@ -94,7 +94,7 @@ class Dashboard extends CI_Controller {
 		$dataList = array();
 		foreach($result as $d){
 			$data = array(
-					'ordernumber' => $d['ordernumber'],
+					'ordernumber' => "<a href='".site_url('store/managingtrack/edittracking?orderid='.$d['hashordertrackingid'])."'>".$d['ordernumber']."</a>",
 					'description' => $d['description'],
 					'category' => $d['category'],
 					'upc' => $d['upc'],

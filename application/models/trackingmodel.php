@@ -502,9 +502,9 @@ class Trackingmodel extends CI_Model {
 	public function fetchDashboard($startTime, $currTime, $brand)
 	{
 		if($brand != '')
-			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc, return_rece_date  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where return_rece_date>='".$startTime."' and  return_rece_date<='".$currTime."' and ff.name='".$brand."' and reimbursed=0  and itemrece='y'");
+			$query = $this->db->query("select ot.ordertrackingid as ordernumber,hashordertrackingid, description, category, upc, return_rece_date  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where return_rece_date>='".$startTime."' and  return_rece_date<='".$currTime."' and ff.name='".$brand."' and reimbursed=0  and itemrece='y'");
 		else
-			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc, return_rece_date  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where return_rece_date>='".$startTime."' and  return_rece_date<='".$currTime."' and reimbursed=0  and itemrece='y'" );
+			$query = $this->db->query("select ot.ordertrackingid as ordernumber, hashordertrackingid, description, category, upc, return_rece_date  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where return_rece_date>='".$startTime."' and  return_rece_date<='".$currTime."' and reimbursed=0  and itemrece='y'" );
 		//$query = $this->db->get();
 
 		if($query->num_rows() > 0)
@@ -513,6 +513,7 @@ class Trackingmodel extends CI_Model {
 			$data = array();
 			foreach($result as $row)
 			{
+				$data['hashordertrackingid'] = $row['hashordertrackingid'];
 				$data['ordernumber'] = $row['ordernumber'];
 				$data['description'] = $row['description'];
 				$data['category'] = $row['category'];
@@ -671,9 +672,9 @@ class Trackingmodel extends CI_Model {
 	public function fetchPNRDashboard($startTime, $currTime, $brand)
 	{
 		if($brand != '')
-			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc, return_initiate_date  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where return_initiate_date>='".$startTime."' and  return_initiate_date<='".$currTime."' and ff.name='".$brand."'  and itemrece='n'");
+			$query = $this->db->query("select ot.ordertrackingid as ordernumber, hashordertrackingid, description, category, upc, return_initiate_date  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where return_initiate_date>='".$startTime."' and  return_initiate_date<='".$currTime."' and ff.name='".$brand."'  and itemrece='n'");
 		else
-			$query = $this->db->query("select ot.ordertrackingid as ordernumber, description, category, upc, return_initiate_date  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where return_initiate_date>='".$startTime."' and  return_initiate_date<='".$currTime."' and itemrece='n'" );
+			$query = $this->db->query("select ot.ordertrackingid as ordernumber, hashordertrackingid, description, category, upc, return_initiate_date  from ips_ordertracking ot inner join ips_productitems ip on ot.ordertrackingid = ip.ordertrackingid  inner join ips_fullfillment ff on ot.fullfillment=ff.fid where return_initiate_date>='".$startTime."' and  return_initiate_date<='".$currTime."' and itemrece='n'" );
 		//$query = $this->db->get();
 
 		if($query->num_rows() > 0)
@@ -682,6 +683,7 @@ class Trackingmodel extends CI_Model {
 			$data = array();
 			foreach($result as $row)
 			{
+				$data['hashordertrackingid'] = $row['hashordertrackingid'];
 				$data['ordernumber'] = $row['ordernumber'];
 				$data['description'] = $row['description'];
 				$data['category'] = $row['category'];

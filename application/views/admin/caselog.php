@@ -130,6 +130,9 @@
                         <li>
                             <a href=<?php echo site_url('admin/caselog');?>>Case Log Report</a>
                         </li>
+						<li>
+                            <a href=<?php echo site_url('admin/productreceive');?>>Product Not Yet Received</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

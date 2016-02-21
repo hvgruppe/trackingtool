@@ -109,6 +109,7 @@ class Managingtrack extends CI_Controller {
 			$casedata = array();
 			
 			$data['fullfillment'] = $this->input->post('fullfillment');
+			$data['itemrece'] = $this->input->post('itemrece');
 			$data['name'] = mysql_real_escape_string($this->input->post('name'));
 			$data['address'] = mysql_real_escape_string($this->input->post('address'));
 			$data['orderid'] = $this->input->post('orderid');
