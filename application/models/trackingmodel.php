@@ -433,7 +433,7 @@ class Trackingmodel extends CI_Model {
 	public function update_notes($hashordertrackingid,$casedata)
 	{
 		$ordertrackingid = '';
-		$query = $this->db->query("select count(ordertrackingid) as ordertrackingid from ips_ordertracking where hashordertrackingid='".$hashordertrackingid."'");
+		$query = $this->db->query("select ordertrackingid from ips_ordertracking where hashordertrackingid='".$hashordertrackingid."'");
 		
 		if ($query->num_rows() > 0)
 		{

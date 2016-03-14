@@ -170,7 +170,8 @@ class Reportsmodel extends CI_Model {
 					$data['Fullfillment'] = '';
 				
 				$data['Order ID'] = $row['orderid'];
-				if($row['itemrece'] == 'Y')
+				$data['SRN Number'] = $row['srnno'];
+				if($row['itemrece'] == 'y')
 					$data['Item Received Status'] = "Yes";
 				else
 					$data['Item Received Status'] = "No";

@@ -38,6 +38,8 @@
 			box-shadow : 0 1px 1px rgba(0, 0, 0, 0.075) inset;
 			outline : 0 none;
 		}
+		th { font-size: 14px; }
+		td { font-size: 14px; }
 	</style>
 </head>
 

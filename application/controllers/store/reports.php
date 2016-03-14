@@ -28,7 +28,7 @@ class Reports extends CI_Controller {
 		$this->load->library('excel');
 		$this->load->model('reportsmodel');
 		$data = array();
-		$postfill = $postbrand = $postdisposition = array();
+		$postfill = $postbrand = $postdisposition = $postcategory = array();
 		
 		if (!empty($this->input->post('fullfillmentselect'))){
 			// $postfill = implode("--",$this->input->post('fullfillmentselect'));
